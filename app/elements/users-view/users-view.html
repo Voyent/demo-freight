@@ -1,0 +1,271 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../styles/shared-styles.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+
+<dom-module id="users-view">
+<template>
+    <style include="shared-styles">
+        :host {
+            display: block;
+        }
+
+        paper-menu {
+            padding: 0;
+        }
+
+        paper-icon-item {
+            width: 100%;
+            display: block;
+            border-bottom: 1px solid #eee;
+            padding: 8px;
+        }
+
+        iron-icon {
+            vertical-align: top;
+        }
+
+        iron-selector > * {
+            padding: 8px;
+        }
+
+        .horizontal-section {
+            padding: 0;
+        }
+
+        .iron-selected {
+            background-color: var(--google-blue-500);
+            color: white;
+        }
+
+        .item-body {
+            display: inline-block;
+        }
+
+        paper-dropdown-menu {
+            text-align: left;
+            margin: auto;
+            width: 180px;
+        }
+
+        paper-dropdown-menu.letters {
+            width: 90px;
+        }
+
+        paper-tabs {
+            width: 400px;
+        }
+
+        .horizontal-section {
+            text-align: center;
+        }
+
+        .nounderline {
+
+        -
+        -paper-input-container-underline: {
+            display: none;
+        }
+
+        ;
+        }
+        paper-toggle-button {
+            margin-bottom: 40px;
+            display: block;
+        }
+
+        paper-toggle-button:last-child {
+            margin-bottom: 0;
+        }
+
+        paper-toggle-button.green {
+            --paper-toggle-button-checked-bar-color: var(--paper-green-500);
+            --paper-toggle-button-checked-button-color: var(--paper-green-500);
+            --paper-toggle-button-checked-ink-color: var(--paper-green-500);
+            --paper-toggle-button-unchecked-bar-color: var(--paper-green-900);
+            --paper-toggle-button-unchecked-button-color: var(--paper-green-900);
+            --paper-toggle-button-unchecked-ink-color: var(--paper-green-900);
+        }
+    </style>
+    <h2 class="page-title">Users</h2>
+    <template is="dom-if" if="{{visible}}">
+        <paper-material>
+            <template is="dom-repeat" items="{{users}}">
+                <paper-item id="[[item.username]]"
+                            style="border-bottom: 1px solid black; padding-bottom:7px; height:200px;">
+                    <iron-icon icon="account-circle" item-icon></iron-icon>
+                    <div class="item-body" style="display:inline-block; width:20%;">
+                        <div>Username: <span>{{item.username}}</span></div>
+                        <div>
+                            <small>
+                                <span>{{item.firstname}}</span> <span>{{item.lastname}}</span>
+                                <span>{{item.email}}</span>
+                            </small>
+                        </div>
+                    </div>
+                    <div style="display:inline-block; width:20%;" class="horizontal-selection">
+                        <paper-dropdown-menu>
+                            <iron-selector class="dropdown-content roleSelect" attr-for-selected="name"
+                                           selected="[[item.role]]">
+                                <div on-click="updateUser" name="pm">Project Manager</div>
+                                <div on-click="updateUser" name="driver">Driver</div>
+                                <div on-click="updateUser" name="scheduler">Scheduler</div>
+                                <div on-click="updateUser" name="ip">Insurance Prime</div>
+                                <div on-click="updateUser" name="qa">QA Manager</div>
+                                <div on-click="updateUser" name="inspector">Inspector</div>
+                            </iron-selector>
+                        </paper-dropdown-menu>
+                    </div>
+                    <div class="routesDiv" style="display:inline-block; width:20%; height:100%; overflow:auto;">
+                        <!--paper-dropdown-menu-->
+                        <iron-selector multi class="dropdown-content regionSelect" attr-for-selected="name">
+                            <template is="dom-repeat" items="{{regions}}">
+                                <div on-click="updateUser" name$="[[item]]">[[item]]</div>
+            </template>
+            </iron-selector>
+            <!--/paper-dropdown-menu-->
+            </div>
+            <div style="display:inline-block; width:20%; padding-left: 20px;">
+                <paper-toggle-button on-click="updateUser" class="green toggleButton">On Duty</paper-toggle-button>
+            </div>
+
+            <br/>
+            </paper-item>
+    </template>
+    </paper-material>
+</template>
+</template>
+<script>
+    (function () {
+        'use strict';
+        var poly;
+
+        Polymer({
+            is: 'users-view',
+
+            properties: {
+                visible: {
+                    type: Boolean,
+                    notify: true,
+                    observer: '_visibleChanged'
+                },
+                users: {
+                    type: Array,
+                    notify: true,
+                    value: []
+                },
+                regions: {
+                    type: Array,
+                    notify: true,
+                    value: []
+                }
+            },
+
+            ready: function () {
+                poly = this;
+            },
+
+            _visibleChanged: function () {
+                if (this.visible) {
+                    //poly.users = [];
+                    poly.regions = [];
+                    poly.loadRegions();
+                }
+            },
+
+            updateUser: function (e) {
+                //var user = e.model.item;
+                setTimeout(function () {
+                    var username = typeof e.model.item !== 'string' ? e.model.item.username : e.path[3].getAttribute('id');
+                    var user = poly.users.filter(function (user) {
+                        return user.username === username;
+                    })[0];
+                    var custom = {};
+                    var regions = [];
+                    var regionEntries = poly.$$('#' + username).querySelector('.regionSelect').querySelectorAll('.iron-selected');
+                    for (var i = 0; i < regionEntries.length; i++) {
+                        regions.push(regionEntries[i].getAttribute('name'));
+                    }
+                    custom.role = poly.$$('#' + username).querySelector('.roleSelect').querySelector('.iron-selected').getAttribute('name');
+                    custom.onDuty = poly.$$('#' + username).querySelector('.toggleButton').getAttribute('checked') !== null;
+                    custom.regions = regions;
+                    user.custom = JSON.stringify(custom);
+                    bridgeit.io.admin.updateRealmUser({user: user});
+                }, 10);
+            },
+
+            loadUsers: function () {
+                bridgeit.io.admin.getRealmUsers().then(function (users) {
+                    users.forEach(function (user) {
+                        try {
+                            //TODO: Ask if user role should be taken from actual 'role' or this dummy segment.
+                            user.role = JSON.parse(user.custom).role;
+                            user.onDuty = JSON.parse(user.custom).onDuty;
+                            user.regions = JSON.parse(user.custom).regions !== null ? JSON.parse(user.custom).regions : [];
+                            poly.push('users', user);
+                            setTimeout(function () {
+                                poly.updateToggles(user);
+                            }, 10);
+                        }
+                        catch (e) {
+                            console.error(e);
+                        }
+                    });
+
+                });
+            },
+
+            updateToggles: function (user) {
+
+                if (user.onDuty) {
+                    poly.$$('#' + user.username).querySelector('.toggleButton').setAttribute('checked', 'checked');
+                }
+                user.regions.forEach(function (region) {
+                    var d = poly.$$('#' + user.username).querySelector('.regionSelect').querySelector('[name="' + region + '"]');
+                    d.className = d.className + ' iron-selected';
+                });
+                if (user.onDuty) {
+                    poly.$$('#' + user.username);
+                }
+            },
+
+            loadRegions: function () {
+                bridgeit.io.location.getAllRegions({}).then(function (locations) {
+                    locations.forEach(function (location) {
+                        try {
+                            var id = location.label ? location.label : location._id;
+                            poly.push('regions', id);
+                        }
+                        catch (e) {
+                            console.error(e);
+                        }
+                    });
+                    if(poly.users.length === 0) {
+                        poly.loadUsers();
+                    }
+                    else{
+                        setTimeout(function() {
+                            for (var i = 0; i < poly.users.length; i++) {
+                                poly.updateToggles(poly.users[i]);
+                            }
+                        },100)
+                    }
+                });
+
+
+            }
+        });
+    })();
+</script>
+</dom-module>
