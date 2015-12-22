@@ -204,27 +204,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             loadUsers: function () {
                 bridgeit.io.admin.getRealmUsers().then(function (users) {
-                    users.forEach(function (user) {
-                        try {
-                            //TODO: Ask if user role should be taken from actual 'role' or this dummy segment.
-                            user.role = JSON.parse(user.custom).role;
-                            user.onDuty = JSON.parse(user.custom).onDuty;
-                            user.regions = JSON.parse(user.custom).regions !== null ? JSON.parse(user.custom).regions : [];
-                            poly.push('users', user);
-                            setTimeout(function () {
-                                poly.updateToggles(user);
-                            }, 10);
-                        }
-                        catch (e) {
-                            console.error(e);
-                        }
-                    });
+                    poly.processUsers(users);
+                });
+            },
 
+            processUsers: function(users){
+                users.forEach(function (user) {
+                    try {
+                        //TODO: Ask if user role should be taken from actual 'role' or this dummy segment.
+                        user.role = JSON.parse(user.custom).role;
+                        user.onDuty = JSON.parse(user.custom).onDuty;
+                        user.regions = JSON.parse(user.custom).regions !== null ? JSON.parse(user.custom).regions : [];
+                        poly.push('users', user);
+                        setTimeout(function () {
+                            poly.updateToggles(user);
+                        }, 10);
+                    }
+                    catch (e) {
+                        console.error(e);
+                    }
                 });
             },
 
             updateToggles: function (user) {
-
                 if (user.onDuty) {
                     poly.$$('#' + user.username).querySelector('.toggleButton').setAttribute('checked', 'checked');
                 }
@@ -252,11 +254,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         poly.loadUsers();
                     }
                     else{
-                        setTimeout(function() {
-                            for (var i = 0; i < poly.users.length; i++) {
-                                poly.updateToggles(poly.users[i]);
-                            }
-                        },100);
+                        poly.processUsers(poly.users);
                     }
                 });
 
