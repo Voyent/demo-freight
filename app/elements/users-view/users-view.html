@@ -114,7 +114,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div style="display:inline-block; width:20%;" class="horizontal-selection">
                         <paper-dropdown-menu>
                             <iron-selector class="dropdown-content roleSelect" attr-for-selected="name"
-                                           selected="[[item.role]]">
+                                           >
                                 <div on-click="updateUser" name="pm">Project Manager</div>
                                 <div on-click="updateUser" name="driver">Driver</div>
                                 <div on-click="updateUser" name="scheduler">Scheduler</div>
@@ -125,19 +125,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </paper-dropdown-menu>
                     </div>
                     <div class="routesDiv" style="display:inline-block; width:20%; height:100%; overflow:auto;">
-                        <!--paper-dropdown-menu-->
+
                         <iron-selector multi class="dropdown-content regionSelect" attr-for-selected="name">
                             <template is="dom-repeat" items="{{regions}}">
                                 <div on-click="updateUser" name$="[[item]]">[[item]]</div>
-            </template>
-            </iron-selector>
-            <!--/paper-dropdown-menu-->
-            </div>
-            <div style="display:inline-block; width:20%; padding-left: 20px;">
-                <paper-toggle-button on-click="updateUser" class="green toggleButton">On Duty</paper-toggle-button>
-            </div>
-
-            <br/>
+                            </template>
+                        </iron-selector>
+                    </div>
+                    <div style="display:inline-block; width:5%; padding-left: 20px;">
+                      <paper-toggle-button on-click="updateUser" class="green toggleButton">On Duty</paper-toggle-button>
+                    </div>
             </paper-item>
     </template>
     </paper-material>
@@ -204,18 +201,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             loadUsers: function () {
                 bridgeit.io.admin.getRealmUsers().then(function (users) {
-                    poly.processUsers(users);
+                    poly.processUsers(users, true);
                 });
             },
 
-            processUsers: function(users){
+            processUsers: function(users, addUser){
                 users.forEach(function (user) {
                     try {
                         //TODO: Ask if user role should be taken from actual 'role' or this dummy segment.
                         user.role = JSON.parse(user.custom).role;
                         user.onDuty = JSON.parse(user.custom).onDuty;
                         user.regions = JSON.parse(user.custom).regions !== null ? JSON.parse(user.custom).regions : [];
-                        poly.push('users', user);
+                        if(addUser) {
+                            poly.push('users', user);
+                        }
                         setTimeout(function () {
                             poly.updateToggles(user);
                         }, 10);
@@ -234,9 +233,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var d = poly.$$('#' + user.username).querySelector('.regionSelect').querySelector('[name="' + region + '"]');
                     d.className = d.className + ' iron-selected';
                 });
-                if (user.onDuty) {
-                    poly.$$('#' + user.username);
-                }
+                var e = poly.$$('#' + user.username).querySelector('.roleSelect').setAttribute('selected',user.role);
             },
 
             loadRegions: function () {
@@ -254,7 +251,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         poly.loadUsers();
                     }
                     else{
-                        poly.processUsers(poly.users);
+                        poly.processUsers(poly.users, false);
                     }
                 });
 
