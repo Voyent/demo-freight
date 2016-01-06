@@ -231,7 +231,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
                 user.regions.forEach(function (region) {
                     var d = poly.$$('#' + user.username).querySelector('.regionSelect').querySelector('[name="' + region + '"]');
-                    d.className = d.className + ' iron-selected';
+                    if(d !== null)
+                      d.className = d.className + ' iron-selected';
                 });
                 poly.$$('#' + user.username).querySelector('.roleSelect').setAttribute('selected',user.role);
             },
