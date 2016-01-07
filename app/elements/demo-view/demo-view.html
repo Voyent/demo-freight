@@ -345,14 +345,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <span>Context</span>
             </a>
 
-            <a data-route="notifications" on-click="onNotificationsRouteClick">
+            <a data-route="actions" on-click="onActionsRouteClick">
               <span class="demo-step-badge">4</span>
+              <span>Actions</span>
+            </a>
+
+            <a data-route="routes" on-click="onRoutesRouteClick">
+              <span class="demo-step-badge">5</span>
+              <span>Routes</span>
+            </a>
+
+            <a data-route="notifications" on-click="onNotificationsRouteClick">
+              <span class="demo-step-badge">6</span>
               <span>Notifications</span>
             </a>
 
             <a data-route="events" on-click="onEventsRouteClick">
-              <span class="demo-step-badge">5</span>
+              <span class="demo-step-badge">7</span>
               <span>Events</span>
+            </a>
+
+            <a data-route="logs" on-click="onLogsRouteClick">
+              <span class="demo-step-badge">8</span>
+              <span>Logs</span>
             </a>
 
           </template>
@@ -426,7 +441,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <locations-view visible="{{isEqual('locations', route)}}"></locations-view>
               </section>
 
+              <section data-route="actions">
+                <actions-view visible="{{isEqual('actions', route)}}">></actions-view>
+              </section>
 
+              <section data-route="routes">
+                <routes-view visible="{{isEqual('routes', route)}}"></routes-view>
+              </section>
 
               <section data-route="context">
                 <context-view visible="{{isEqual('context', route)}}">
@@ -444,7 +465,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </notifications-view>
               </section>
 
-
+              <section data-route="logs">
+                <logs-view visible="{{isEqual('logs', route)}}"></logs-view>
+              </section>
 
             </template>
 
