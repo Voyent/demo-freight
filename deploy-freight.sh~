@@ -8,7 +8,7 @@ echo "...Removing old Bower components and Dist..."
 rm -rf ./bower_components
 rm -rf ./dist
 echo "...Updating Bower with new install..."
-bower install
+bower install --allow-root
 echo "...Processing Gulp for production..."
 gulp || { exit 1; }
 cd ./dist

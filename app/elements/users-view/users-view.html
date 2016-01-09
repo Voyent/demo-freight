@@ -124,13 +124,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </iron-selector>
                         </paper-dropdown-menu>
                     </div>
-                    <div class="routesDiv" style="display:inline-block; width:20%; height:100%; overflow:auto;">
+                    <div class="routesDiv regionSelect" style="display:inline-block; width:20%; height:100%; overflow:auto;">
 
-                        <iron-selector multi class="dropdown-content regionSelect" attr-for-selected="name">
-                            <template is="dom-repeat" items="{{regions}}">
-                                <div on-click="updateUser" name$="[[item]]">[[item]]</div>
-                            </template>
-                        </iron-selector>
+                      <template is="dom-repeat" items="{{regions}}">
+                        <paper-checkbox on-click="updateUser" name$="[[item]]">[[item]]</paper-checkbox><br/>
+                      </template>
                     </div>
                     <div style="display:inline-block; width:5%; padding-left: 20px;">
                       <paper-toggle-button on-click="updateUser" class="green toggleButton">On Duty</paper-toggle-button>
@@ -187,9 +185,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     })[0];
                     var custom = {};
                     var regions = [];
-                    var regionEntries = poly.$$('#' + username).querySelector('.regionSelect').querySelectorAll('.iron-selected');
+                    var regionEntries = poly.$$('#' + username).querySelector('.regionSelect').querySelectorAll('paper-checkbox');
                     for (var i = 0; i < regionEntries.length; i++) {
-                        regions.push(regionEntries[i].getAttribute('name'));
+                        if(regionEntries[i].checked) {
+                          regions.push(regionEntries[i].getAttribute('name'));
+                        }
                     }
                     custom.role = poly.$$('#' + username).querySelector('.roleSelect').querySelector('.iron-selected').getAttribute('name');
                     custom.onDuty = poly.$$('#' + username).querySelector('.toggleButton').getAttribute('checked') !== null;
@@ -229,12 +229,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 if (user.onDuty) {
                     poly.$$('#' + user.username).querySelector('.toggleButton').setAttribute('checked', 'checked');
                 }
+
                 user.regions.forEach(function (region) {
                     var d = poly.$$('#' + user.username).querySelector('.regionSelect').querySelector('[name="' + region + '"]');
                     if(d !== null) {
-                      d.className = d.className + ' iron-selected';
+                      d.setAttribute('checked', 'checked');
                     }
                 });
+
                 poly.$$('#' + user.username).querySelector('.roleSelect').setAttribute('selected',user.role);
             },
 
