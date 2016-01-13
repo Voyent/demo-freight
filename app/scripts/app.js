@@ -38,7 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if( demoData ){
              demoData.lastNotificationTimestamp = new Date().getTime();
           }
-        }, 5000); 
+        }, 5000);
       }
     });
 
@@ -49,7 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     function setupNotificationListener(){
-      bridgeit.xio.push.attach('http://dev.bridgeit.io/pushio/demos/realms/freight', bridgeit.io.auth.getLastKnownUsername());
+      bridgeit.xio.push.attach('http://'+app.host+'/pushio/demos/realms/freight', bridgeit.io.auth.getLastKnownUsername());
       bridgeit.xio.push.addListener(function (payload) {
           console.log('Notification: ', payload);
 
@@ -98,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       window.initializePushGroups(); //delegates to index.html for admins or client.html for regular users
     }
 
-    
+
 
     // See https://github.com/Polymer/polymer/issues/1381
     window.addEventListener('WebComponentsReady', function() {
@@ -115,7 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       bridgeit.xio.push.disconnect();
     });
 
-    
+
 
     // Main area's paper-scroll-header-panel custom condensing transformation of
     // the appName in the middle-container and the bottom title in the bottom-container.
@@ -170,6 +170,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
   else{
     finishLazyLoading();
-  }  
+  }
 
 })(document);
