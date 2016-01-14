@@ -56,7 +56,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
     <h2 class="page-title">Queries</h2>
-    <template is="dom-if" if="{{visible}}">
       <bridgeit-query-list for="queries"></bridgeit-query-list>
       <div class="buttons">
         <button onclick="document.getElementById('queries').resetEditor();">New/Reset</button>
@@ -67,7 +66,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <bridgeit-query-editor id="queries" service="authadmin"></bridgeit-query-editor>
       <bridgeit-query-results for="queries"></bridgeit-query-results>
-    </template>
   </template>
   <script>
     (function() {
