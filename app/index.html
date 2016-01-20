@@ -124,15 +124,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       bridgeit.io.admin.getRealmUsers().then( function(users){
         setTimeout(function(){
           users.forEach(function(user){
-            try{
-              user.gender = JSON.parse(user.custom).gender;
-            }
-            catch(e){
-              console.error(e);
-            }
             bridgeit.xio.push.join(user.username);
           });
-          demoView.$$('demo-data').users = users;
+          //demoView.$$('demo-data').users = users;
         }, 5000);
 
       }).catch( function(error){

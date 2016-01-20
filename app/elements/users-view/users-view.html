@@ -99,17 +99,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template is="dom-if" if="{{visible}}">
         <paper-material>
             <template is="dom-repeat" items="{{users}}">
-                <paper-item id="[[item.username]]"
+                <paper-item id="[[item._id]]"
                             style="border-bottom: 1px solid black; padding-bottom:7px; height:200px;">
                     <iron-icon icon="account-circle" item-icon></iron-icon>
                     <div class="item-body" style="display:inline-block; width:20%;">
-                        <div>Username: <span>{{item.username}}</span></div>
+                        <div>Username: <span>{{item._id}}</span></div>
+                        <!-- Commenting this out for now since the user data is being pulled from mailbox service now.
+                        If we want this information added again we'll have to combine the auth + mailbox records manually
                         <div>
                             <small>
                                 <span>{{item.firstname}}</span> <span>{{item.lastname}}</span>
                                 <span>{{item.email}}</span>
                             </small>
-                        </div>
+                        </div>-->
                     </div>
                     <div style="display:inline-block; width:20%;" class="horizontal-selection">
                         <paper-dropdown-menu>
@@ -170,20 +172,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             _visibleChanged: function () {
                 if (this.visible) {
-                    //poly.users = [];
                     poly.regions = [];
                     poly.loadRegions();
                 }
             },
 
             updateUser: function (e) {
-                //var user = e.model.item;
                 setTimeout(function () {
-                    var username = typeof e.model.item !== 'string' ? e.model.item.username : e.path[3].getAttribute('id');
-                    var user = poly.users.filter(function (user) {
-                        return user.username === username;
-                    })[0];
-                    var custom = {};
+                    var username = typeof e.model.item !== 'string' ? e.model.item._id : e.path[2].getAttribute('id');
                     var regions = [];
                     var regionEntries = poly.$$('#' + username).querySelector('.regionSelect').querySelectorAll('paper-checkbox');
                     for (var i = 0; i < regionEntries.length; i++) {
@@ -191,53 +187,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                           regions.push(regionEntries[i].getAttribute('name'));
                         }
                     }
-                    custom.role = poly.$$('#' + username).querySelector('.roleSelect').querySelector('.iron-selected').getAttribute('name');
-                    custom.onDuty = poly.$$('#' + username).querySelector('.toggleButton').getAttribute('checked') !== null;
-                    custom.regions = regions;
-                    user.custom = JSON.stringify(custom);
-                    bridgeit.io.admin.updateRealmUser({user: user});
+                    var mailbox = {
+                      info: {
+                        role: poly.$$('#' + username).querySelector('.roleSelect').querySelector('.iron-selected').getAttribute('name'),
+                        regions: regions
+                      },
+                      state: {
+                        onDuty: poly.$$('#' + username).querySelector('.toggleButton').getAttribute('checked') !== null
+                      }
+                    };
+                    bridgeit.io.mailbox.updateMailbox({id: username, mailbox: mailbox});
                 }, 10);
             },
 
             loadUsers: function () {
-                bridgeit.io.admin.getRealmUsers().then(function (users) {
-                    poly.processUsers(users, true);
+                bridgeit.io.mailbox.findMailboxes().then(function (users) {
+                    poly.set('users',users);
+                    poly.updateToggles();
                 });
             },
 
-            processUsers: function(users, addUser){
-                users.forEach(function (user) {
-                    try {
-                        //TODO: Ask if user role should be taken from actual 'role' or this dummy segment.
-                        user.role = JSON.parse(user.custom).role;
-                        user.onDuty = JSON.parse(user.custom).onDuty;
-                        user.regions = JSON.parse(user.custom).regions !== null ? JSON.parse(user.custom).regions : [];
-                        if(addUser) {
-                            poly.push('users', user);
-                        }
-                        setTimeout(function () {
-                            poly.updateToggles(user);
-                        }, 10);
+            updateToggles: function () {
+              for (var i=0; i<poly.users.length; i++) {
+                (function(user) {
+                  setTimeout(function () {
+                    if (user.state.onDuty) {
+                      poly.$$('#' + user._id).querySelector('.toggleButton').setAttribute('checked', 'checked');
                     }
-                    catch (e) {
-                        console.error(e);
-                    }
-                });
-            },
-
-            updateToggles: function (user) {
-                if (user.onDuty) {
-                    poly.$$('#' + user.username).querySelector('.toggleButton').setAttribute('checked', 'checked');
-                }
-
-                user.regions.forEach(function (region) {
-                    var d = poly.$$('#' + user.username).querySelector('.regionSelect').querySelector('[name="' + region + '"]');
-                    if(d !== null) {
-                      d.setAttribute('checked', 'checked');
-                    }
-                });
-
-                poly.$$('#' + user.username).querySelector('.roleSelect').setAttribute('selected',user.role);
+                    user.info.regions.forEach(function (region) {
+                      var d = poly.$$('#' + user._id).querySelector('.regionSelect').querySelector('[name="' + region + '"]');
+                      if(d !== null) {
+                        d.setAttribute('checked', 'checked');
+                      }
+                    });
+                    poly.$$('#' + user._id).querySelector('.roleSelect').setAttribute('selected',user.info.role);
+                  },10);
+                })(poly.users[i]);
+              }
             },
 
             loadRegions: function () {
@@ -251,15 +237,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             console.error(e);
                         }
                     });
-                    if(poly.users.length === 0) {
-                        poly.loadUsers();
+                    if (poly.users.length === 0) {
+                      poly.loadUsers();
                     }
-                    else{
-                        poly.processUsers(poly.users, false);
+                    else {
+                      poly.updateToggles();
                     }
                 });
-
-
             }
         });
     })();
