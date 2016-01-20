@@ -70,13 +70,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         .nounderline {
 
-        -
+        }
+
         -paper-input-container-underline: {
             display: none;
         }
 
-        ;
-        }
         paper-toggle-button {
             margin-bottom: 40px;
             display: block;
@@ -208,21 +207,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             updateToggles: function () {
-              for (var i=0; i<poly.users.length; i++) {
-                (function(user) {
-                  setTimeout(function () {
-                    if (user.state.onDuty) {
-                      poly.$$('#' + user._id).querySelector('.toggleButton').setAttribute('checked', 'checked');
+              function doToggleUpdate(user) {
+                setTimeout(function () {
+                  if (user.state.onDuty) {
+                    poly.$$('#' + user._id).querySelector('.toggleButton').setAttribute('checked', 'checked');
+                  }
+                  user.info.regions.forEach(function (region) {
+                    var d = poly.$$('#' + user._id).querySelector('.regionSelect').querySelector('[name="' + region + '"]');
+                    if(d !== null) {
+                      d.setAttribute('checked', 'checked');
                     }
-                    user.info.regions.forEach(function (region) {
-                      var d = poly.$$('#' + user._id).querySelector('.regionSelect').querySelector('[name="' + region + '"]');
-                      if(d !== null) {
-                        d.setAttribute('checked', 'checked');
-                      }
-                    });
-                    poly.$$('#' + user._id).querySelector('.roleSelect').setAttribute('selected',user.info.role);
-                  },10);
-                })(poly.users[i]);
+                  });
+                  poly.$$('#' + user._id).querySelector('.roleSelect').setAttribute('selected',user.info.role);
+                },10);
+              }
+
+              for (var i=0; i<poly.users.length; i++) {
+                doToggleUpdate(poly.users[i]);
               }
             },
 
