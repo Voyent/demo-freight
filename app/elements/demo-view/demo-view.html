@@ -365,18 +365,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <span>Routes</span>
             </a>
 
-            <a data-route="notifications" on-click="onNotificationsRouteClick">
+            <a data-route="accel" on-click="onAccelRouteClick">
               <span class="demo-step-badge">8</span>
+              <span>Accelerometer</span>
+            </a>
+
+            <a data-route="notifications" on-click="onNotificationsRouteClick">
+              <span class="demo-step-badge">9</span>
               <span>Notifications</span>
             </a>
 
             <a data-route="events" on-click="onEventsRouteClick">
-              <span class="demo-step-badge">9</span>
+              <span class="demo-step-badge">10</span>
               <span>Events</span>
             </a>
 
             <a data-route="logs" on-click="onLogsRouteClick">
-              <span class="demo-step-badge">10</span>
+              <span class="demo-step-badge">11</span>
               <span>Logs</span>
             </a>
 
@@ -398,7 +403,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-scroll-header-panel main id="headerPanelMain" condenses keep-condensed-header>
 
         <!-- Main Toolbar -->
-        <paper-toolbar id="mainToolbar" class="tall">
+        <paper-toolbar id="mainToolbar" class="tall" style="background-color:#E4E4E4">
           <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
           <span class="flex"></span>
 
@@ -428,7 +433,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- Application sub title -->
           <div class="bottom bottom-container center horizontal layout hidden-phone">
-            <div class="bottom-title paper-font-subhead"><span class="quote">&ldquo;</span>*Insert Motto here*<span class="quote">&rdquo;</span>&nbsp;&nbsp;&nbsp;- Motto</div>
+            <div class="bottom-title paper-font-subhead"><span class="quote">&ldquo;</span>No highway too long.<span class="quote">&rdquo;</span>&nbsp;&nbsp;&nbsp;- Motto</div>
           </div>
 
         </paper-toolbar>
@@ -472,6 +477,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </context-view>
               </section>
 
+              <section data-route="accel">
+                <accel-view visible="{{isEqual('accel', route)}}" users="{{users}}"></accel-view>
+              </section>
+
               <section data-route="events">
                   <events-view visible="{{isEqual('events', route)}}"></events-view>
               </section>
@@ -513,6 +522,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <demo-data id="demoData"
         notifications="{{notifications}}"
         users="{{users}}"
+        scenarios="{{scenarios}}"
         last-notification-timestamp="{{lastNotificationTimestamp}}"
         notifications-by-user="{{notificationsByUser}}"
         notification-count="{{notificationCount}}">
@@ -681,6 +691,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       onRoutesRouteClick: function(e){
         this.onDataRouteClick(e, 'routes');
+      },
+
+      onAccelRouteClick: function(e){
+        this.onDataRouteClick(e, 'accel');
       },
 
       onContextRouteClick: function(e){

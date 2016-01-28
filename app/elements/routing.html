@@ -50,6 +50,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.scrollPageToTop();
     });
 
+    page('/accel', function () {
+      app.$.demoView.route = 'accel';
+      app.scrollPageToTop();
+    });
+
     page('/actions', function () {
       app.$.demoView.route = 'actions';
       app.scrollPageToTop();
@@ -64,33 +69,5 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     page({
       hashbang: true
     });
-/**
-
-
-    page('/locations', function () {
-      app.$.demoView.route = 'locations';
-      app.scrollPageToTop();
-    });
-
-    page('/notifications', function () {
-      app.$.demoView.route = 'notifications';
-      app.scrollPageToTop();
-    });
-
-    page('/events', function () {
-      app.$.demoView.route = 'events';
-      app.scrollPageToTop();
-    });
-
-    page('/context', function () {
-      app.$.demoView.route = 'context';
-      app.scrollPageToTop();
-    });
-
-    // add #! before urls
-    page({
-      hashbang: true
-    });
-*/
   });
 </script>

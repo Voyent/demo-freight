@@ -20,23 +20,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       properties: {
         users: {type: Array, notify: true},
-        currentTemp: {type: Number, notify: true},
-        thresholdTemp: {type: Number, notify: true},
-        notifications: {type: Array, value: [], notify: true},
-        hotMaleTemplate: {type: String, notify: true},
-        coldMaleTemplate: {type: String, notify: true},
-        hotFemaleTemplate: {type: String, notify: true},
-        coldFemaleTemplate: {type: String, notify: true},
         notificationsByUser: {type: Object, notify: true, value: function(){ return {}; }},
+        notifications: {type: Array, value: [], notify: true},
         lastNotificationTimestamp: {type: Date, notify: true},
-        notificationCount: { type: Number, notify: true, reflectToAttribute: true, computed: '_computeNotificationCount(notifications.splices)'},
+        notificationCount: { type: Number, notify: true, reflectToAttribute: true, computed: '_computeNotificationCount(notifications.spices)'}
       },
 
       _computeNotificationCount: function(notifications){
         var res = this.notifications ? this.notifications.length : 0;
         console.log('_computeNotificationCount(' + notifications + ') = ' + res);
         return res;
-      },
+      }
     });
   })();
   </script>
