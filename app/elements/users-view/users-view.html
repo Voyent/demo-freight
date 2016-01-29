@@ -101,7 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-item id="[[item._id]]"
                             style="border-bottom: 1px solid black; padding-bottom:7px; height:200px;">
                     <iron-icon icon="account-circle" item-icon></iron-icon>
-                    <div class="item-body" style="display:inline-block; width:20%;">
+                    <div class="item-body" style="display:inline-block; width:20%; vertical-align: middle;">
                         <div>Username: <span>{{item._id}}</span></div>
                         <!-- Commenting this out for now since the user data is being pulled from mailbox service now.
                         If we want this information added again we'll have to combine the auth + mailbox records manually
@@ -112,7 +112,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </small>
                         </div>-->
                     </div>
-                    <div style="display:inline-block; width:20%;" class="horizontal-selection">
+                    <div style="display:inline-block; width:20%;vertical-align: middle;" class="horizontal-selection">
                         <paper-dropdown-menu>
                             <iron-selector class="dropdown-content roleSelect" attr-for-selected="name"
                                            >
@@ -125,13 +125,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </iron-selector>
                         </paper-dropdown-menu>
                     </div>
-                    <div class="routesDiv regionSelect" style="display:inline-block; width:20%; height:100%; overflow:auto;">
+                    <div class="routesDiv regionSelect" style="display:inline-block; width:20%; height:100%; overflow:auto;vertical-align: middle;">
 
                       <template is="dom-repeat" items="{{regions}}">
                         <paper-checkbox on-click="updateUser" name$="[[item]]">[[item]]</paper-checkbox><br/>
                       </template>
                     </div>
-                    <div style="display:inline-block; width:5%; padding-left: 20px;">
+                    <div style="display:inline-block; width:5%; padding-left: 20px;vertical-align: middle;">
                       <paper-toggle-button on-click="updateUser" class="green toggleButton">On Duty</paper-toggle-button>
                     </div>
             </paper-item>
