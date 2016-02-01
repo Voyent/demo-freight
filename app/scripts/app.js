@@ -9,46 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 (function(document) {
   'use strict';
-
-  function finishLazyLoading(){
-    // Grab a reference to our auto-binding template
-    // and give it some initial binding values
-    // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
-    var app = document.querySelector('#app');
-
-    //set default host;
-    app.host = 'dev.bridgeit.io';
-
-    app.displayInstalledToast = function() {
-      // Check to make sure caching is actually enabled—it won't be in the dev environment.
-      if (!document.querySelector('platinum-sw-cache').disabled) {
-        document.querySelector('#caching-complete').show();
-      }
-    };
-
-    // Listen for template bound event to know when bindings
-    // have resolved and content has been stamped to the page
-    app.addEventListener('dom-change', function() {
-      console.log('Initializing demo');
-      if( bridgeit.io.auth.isLoggedIn()){
-        setTimeout(function(){
-          setupNotificationListener();
-          //initialize lastNotificationTimestamp so user list displays
-          var demoData = app.$.demoView.$$('#demoData');
-          if( demoData ){
-             demoData.lastNotificationTimestamp = new Date().getTime();
-          }
-        }, 5000);
-      }
-    });
-
-    // Startup the Notification Push Listener after login
-    window.addEventListener('onAfterLogin', function(){
-      console.log('onAfterLogin callback: configuring notifications');
-      setupNotificationListener();
-    });
-
-    function setupNotificationListener(){
+  
+  function setupNotificationListener(){
       bridgeit.xio.push.attach('http://'+app.host+'/pushio/demos/realms/freight', bridgeit.io.auth.getLastKnownUsername());
       bridgeit.xio.push.addListener(function (payload) {
           console.log('Notification: ', payload);
@@ -98,7 +60,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       window.initializePushGroups(); //delegates to index.html for admins or client.html for regular users
     }
 
+  function finishLazyLoading(){
+    // Grab a reference to our auto-binding template
+    // and give it some initial binding values
+    // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
+    var app = document.querySelector('#app');
 
+    //set default host;
+    app.host = 'dev.bridgeit.io';
+
+    app.displayInstalledToast = function() {
+      // Check to make sure caching is actually enabled—it won't be in the dev environment.
+      if (!document.querySelector('platinum-sw-cache').disabled) {
+        document.querySelector('#caching-complete').show();
+      }
+    };
+
+    // Listen for template bound event to know when bindings
+    // have resolved and content has been stamped to the page
+    app.addEventListener('dom-change', function() {
+      console.log('Initializing demo');
+      if( bridgeit.io.auth.isLoggedIn()){
+        setTimeout(function(){
+          setupNotificationListener();
+          //initialize lastNotificationTimestamp so user list displays
+          var demoData = app.$.demoView.$$('#demoData');
+          if( demoData ){
+             demoData.lastNotificationTimestamp = new Date().getTime();
+          }
+        }, 5000);
+      }
+    });
+
+    // Startup the Notification Push Listener after login
+    window.addEventListener('onAfterLogin', function(){
+      console.log('onAfterLogin callback: configuring notifications');
+      setupNotificationListener();
+    });
 
     // See https://github.com/Polymer/polymer/issues/1381
     window.addEventListener('WebComponentsReady', function() {
