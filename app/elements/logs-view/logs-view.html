@@ -26,6 +26,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
         --log-viewer-td: {
           padding: 2px;
+          word-wrap: break-word;
+          max-width: 200px;
         };
         --log-viewer-button: {
           font: inherit;
@@ -38,12 +40,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           cursor:pointer;
         }
       }
+
+      paper-toggle-button {
+        margin-bottom: 40px;
+        display: block;
+      }
+
+      paper-toggle-button:last-child {
+        margin-bottom: 0;
+      }
+
+      paper-toggle-button.green {
+        --paper-toggle-button-checked-bar-color: var(--paper-green-500);
+        --paper-toggle-button-checked-button-color: var(--paper-green-500);
+        --paper-toggle-button-checked-ink-color: var(--paper-green-500);
+        --paper-toggle-button-unchecked-bar-color: var(--paper-green-900);
+        --paper-toggle-button-unchecked-button-color: var(--paper-green-900);
+        --paper-toggle-button-unchecked-ink-color: var(--paper-green-900);
+      }
     </style>
     <h2 class="page-title">Logs</h2>
     <template is="dom-if" if="{{visible}}">
-      <paper-button raised colored on-click="fetchLogs" style="float:right;margin-top: -44px;">Fetch Logs</paper-button>
+      <div style="float:right;">
+        <paper-button raised colored on-click="fetchLogs">Fetch Logs</paper-button>
+        <div style="padding:5px 0 0 15px;">
+          <paper-toggle-button checked="{{debug}}" class="green toggleButton">Debug</paper-toggle-button>
+        </div>
+      </div>
       <template is="dom-if" if="{{visible}}">
-        <bridgeit-log-viewer id="logViewer" header="true" footer="true" options="{'sort':{'time':1}}" paginator="true" pagesize="25">
+        <bridgeit-log-viewer id="logViewer" header footer paginator pagesize="25" debug="{{debug}}" options="{'sort':{'time':1}}">
         </bridgeit-log-viewer>
       </template>
     </template>
@@ -59,11 +84,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         visible: {
           type: Boolean,
           notify: true
+        },
+        debug: {
+          type: Boolean,
+          value:true,
+          observer: 'fetchLogs'
         }
       },
 
       fetchLogs: function(){
-        this.$$('#logViewer').fetchLogs();
+        if (this.$$('#logViewer')) {
+          this.$$('#logViewer').fetchLogs();
+        }
       }
     });
   })();
