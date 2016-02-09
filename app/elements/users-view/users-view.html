@@ -178,7 +178,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             updateUser: function (e) {
                 setTimeout(function () {
-                    var username = typeof e.model.item !== 'string' ? e.model.item._id : e.path[2].getAttribute('id');
+                    var username = typeof e.model.item !== 'string' ? e.model.item._id : e.path[3].getAttribute('id');
                     var regions = [];
                     var regionEntries = poly.$$('#' + username).querySelector('.regionSelect').querySelectorAll('paper-checkbox');
                     for (var i = 0; i < regionEntries.length; i++) {
