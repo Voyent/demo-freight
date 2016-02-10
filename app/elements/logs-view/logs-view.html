@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </div>
       <template is="dom-if" if="{{visible}}">
-        <bridgeit-log-viewer id="logViewer" header footer paginator pagesize="25" debug="{{debug}}" options="{'sort':{'time':1}}">
+        <bridgeit-log-viewer id="logViewer" header footer paginator local debug="{{debug}}" pagesize="25" options="{'sort':{'time':-1}}">
         </bridgeit-log-viewer>
       </template>
     </template>
