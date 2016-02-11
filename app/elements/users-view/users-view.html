@@ -98,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template is="dom-if" if="{{visible}}">
         <paper-material>
             <template is="dom-repeat" items="{{users}}">
-                <paper-item id="[[item._id]]"
+                <paper-item id="[[item._id]]" class="userParent"
                             style="border-bottom: 1px solid black; padding-bottom:7px; height:200px;">
                     <iron-icon icon="account-circle" item-icon></iron-icon>
                     <div class="item-body" style="display:inline-block; width:20%; vertical-align: middle;">
@@ -125,10 +125,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </iron-selector>
                         </paper-dropdown-menu>
                     </div>
-                    <div class="routesDiv regionSelect" style="display:inline-block; width:20%; height:100%; overflow:auto;vertical-align: middle;">
-
+                    <div class="routesDiv regionSelect" style="display:inline-block; width:20%;vertical-align: middle;">
                       <template is="dom-repeat" items="{{regions}}">
                         <paper-checkbox on-click="updateUser" name$="[[item]]">[[item]]</paper-checkbox><br/>
+                      </template>
+                    </div>
+                    <div class="routesDiv deviceDiv" style="display:inline-block; width:20%; overflow:auto;vertical-align: middle;">
+                      <template is="dom-if" if="{{driverTest(item)}}">
+                        <paper-dropdown-menu>
+                          <iron-selector class="dropdown-content deviceSelect" attr-for-selected="name"
+                          >
+                            <div on-click="updateUser" name="0007802F573B">573B</div>
+                            <div on-click="updateUser" name="0007802F632A">632A</div>
+                            <div on-click="updateUser" name="0007802F643B">643B</div>
+                            <div on-click="updateUser" name="0007802F643D">643D</div>
+                            <div on-click="updateUser" name="0007802F6B0D">6B0D</div>
+                          </iron-selector>
+                        </paper-dropdown-menu>
                       </template>
                     </div>
                     <div style="display:inline-block; width:5%; padding-left: 20px;vertical-align: middle;">
@@ -178,7 +191,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             updateUser: function (e) {
                 setTimeout(function () {
-                    var username = typeof e.model.item !== 'string' ? e.model.item._id : e.path[3].getAttribute('id');
+
+                    var username = e.srcElement.closest('.userParent').getAttribute('id');
                     var regions = [];
                     var regionEntries = poly.$$('#' + username).querySelector('.regionSelect').querySelectorAll('paper-checkbox');
                     for (var i = 0; i < regionEntries.length; i++) {
@@ -195,6 +209,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         onDuty: poly.$$('#' + username).querySelector('.toggleButton').getAttribute('checked') !== null
                       }
                     };
+                    if(poly.$$('#' + username).querySelector('.deviceSelect') !== null){
+                        mailbox.info.device = poly.$$('#' + username).querySelector('.deviceSelect').querySelector('.iron-selected').getAttribute('name');
+                    }
                     bridgeit.io.mailbox.updateMailbox({id: username, mailbox: mailbox});
                 }, 10);
             },
@@ -218,6 +235,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       d.setAttribute('checked', 'checked');
                     }
                   });
+                  if(user.info.role === 'driver'){
+                    poly.$$('#' + user._id).querySelector('.deviceSelect').setAttribute('selected',user.info.device);
+                  }
                   poly.$$('#' + user._id).querySelector('.roleSelect').setAttribute('selected',user.info.role);
                 },10);
               }
@@ -245,7 +265,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       poly.updateToggles();
                     }
                 });
-            }
+            },
+
+          driverTest: function(item){
+            return item.info.role === 'driver';
+          }
         });
     })();
 </script>
