@@ -25,29 +25,7 @@
         document.querySelector('#caching-complete').show();
       }
     };
-
-    // Listen for template bound event to know when bindings
-    // have resolved and content has been stamped to the page
-    app.addEventListener('dom-change', function() {
-      console.log('Initializing demo');
-      if( bridgeit.io.auth.isLoggedIn()){
-        setTimeout(function(){
-          setupNotificationListener();
-          //initialize lastNotificationTimestamp so user list displays
-          var demoData = app.$.demoView.$$('#demoData');
-          if( demoData ){
-            demoData.lastNotificationTimestamp = new Date().getTime();
-          }
-        }, 5000);
-      }
-    });
-
-    // Startup the Notification Push Listener after login
-    window.addEventListener('onAfterLogin', function(){
-      console.log('onAfterLogin callback: configuring notifications');
-      setupNotificationListener();
-    });
-
+    
     function setupNotificationListener(){
       bridgeit.xio.push.attach('http://'+app.host+'/pushio/demos/realms/freight', bridgeit.io.auth.getLastKnownUsername());
       bridgeit.xio.push.addListener(function (payload) {
@@ -98,7 +76,27 @@
       window.initializePushGroups(); //delegates to index.html for admins or client.html for regular users
     }
 
-
+    // Listen for template bound event to know when bindings
+    // have resolved and content has been stamped to the page
+    app.addEventListener('dom-change', function() {
+      console.log('Initializing demo');
+      if( bridgeit.io.auth.isLoggedIn()){
+        setTimeout(function(){
+          setupNotificationListener();
+          //initialize lastNotificationTimestamp so user list displays
+          var demoData = app.$.demoView.$$('#demoData');
+          if( demoData ){
+            demoData.lastNotificationTimestamp = new Date().getTime();
+          }
+        }, 5000);
+      }
+    });
+    
+    // Startup the Notification Push Listener after login
+    window.addEventListener('onAfterLogin', function(){
+      console.log('onAfterLogin callback: configuring notifications');
+      setupNotificationListener();
+    });
 
     // See https://github.com/Polymer/polymer/issues/1381
     window.addEventListener('WebComponentsReady', function() {
@@ -114,8 +112,6 @@
       console.log('demo app received event bridgeit-session-expired', e);
       bridgeit.xio.push.disconnect();
     });
-
-
 
     // Main area's paper-scroll-header-panel custom condensing transformation of
     // the appName in the middle-container and the bottom title in the bottom-container.
