@@ -193,13 +193,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         updateRelation: function (e) {
           setTimeout(function () {
             var parentDiv = e.srcElement.closest('.cargoParent');
-            var device = parentDiv.getAttribute('value');
+            var device = parentDiv.getAttribute('id').substring(1);
             var driver = parentDiv.querySelector('.driverSelect').querySelector('.iron-selected').getAttribute('name');
             var cargo = parentDiv.querySelector('.cargoInput').value;
 
             var relation = {'driver':driver,'cargo':cargo};
 
             var params = {'collection':'accelerometer-relations','id':device,'document':relation};
+            
             bridgeit.io.documents.updateDocument(params);
           }, 10);
         },
