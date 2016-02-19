@@ -186,7 +186,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               bridgeit.io.metrics.createCustomEvent(params);
             }
             else{
-              var macAddress = item.getAttribute('value');
+              var macAddress = item.getAttribute('id').substring(1);
               if(item.className.indexOf('deadDevice') !== -1){
                 item.classList.add('liveDevice');
                 item.classList.remove('deadDevice');
