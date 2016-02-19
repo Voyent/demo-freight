@@ -22,10 +22,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         users: {type: Array, notify: true},
         notificationsByUser: {type: Object, notify: true, value: function(){ return {}; }},
         notifications: {type: Array, value: [], notify: true},
-        //deviceDocuments:{type: Array, notify: true,reflectToAttribute:true,computed:'_computeDeviceDocuments()'},
-        //devices:{type:Array,value:['0007802F573B', '0007802F632A', '0007802F643B', '0007802F643D', '0007802F6B0D'], notify: false},
         lastNotificationTimestamp: {type: Date, notify: true},
-        notificationCount: { type: Number, notify: true, reflectToAttribute: true, computed: '_computeNotificationCount(notifications.spices)'}
+        notificationCount: { type: Number, notify: true, reflectToAttribute: true, computed: '_computeNotificationCount(notifications.splices)'}
       },
 
       _computeNotificationCount: function(notifications){
@@ -34,10 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return res;
       },
 
-      //_computeDeviceDocuments:function(){
-      //  console.log("LOOK HERE!!!");
-      //  console.log(this.devices);
-      //}
+
     });
   })();
   </script>

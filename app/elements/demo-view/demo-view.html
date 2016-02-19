@@ -56,7 +56,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       paper-drawer-panel ::content #drawer paper-toolbar ::content #topBar{
         background-image: url(../../images/highwayCrop.jpg);
-        background-size: 155%;
+        background-size: 107%;
         text-shadow: 1px 1px 1px #000;
       }
       paper-toolbar.tall .app-name {
@@ -70,6 +70,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 50px;
         margin: -20px 15px -20px -20px;
       }
+      #mainToolbar{
+        color:black;
+      }
+
       #mainToolbar .middle-container  {
         height: 100%;
         margin-left: 15px;
@@ -311,7 +315,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template is="dom-if" if="{{visible}}">
       <iron-media-query query="(min-width: 600px) and (max-width: 800px)" query-matches="{{vgaWidth}}"></iron-media-query>
-      <paper-drawer-panel id="paperDrawerPanel" drawer-width="{{drawerWidth}}">
+      <paper-drawer-panel id="paperDrawerPanel" drawer-width="200px">
       <!-- Drawer Scroll Header Panel -->
       <paper-scroll-header-panel drawer fixed>
 
@@ -449,7 +453,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <template is="dom-if" if="{{isAdmin}}">
 
               <section data-route="users">
-                <users-view visible="{{isEqual('users', route)}}" users="{{users}}"></users-view>
+                <users-view visible="{{isEqual('users', route)}}" ></users-view>
               </section>
 
               <section data-route="regions">
@@ -473,12 +477,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </section>
 
               <section data-route="cargo">
-                <cargo-view visible="{{isEqual('cargo', route)}}" users="{{users}}">
+                <cargo-view visible="{{isEqual('cargo', route)}}">
                 </cargo-view>
               </section>
 
               <section data-route="accel">
-                <accel-view visible="{{isEqual('accel', route)}}" users="{{users}}"></accel-view>
+                <accel-view visible="{{isEqual('accel', route)}}""></accel-view>
               </section>
 
               <section data-route="events">
@@ -756,7 +760,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return '180px';
         }
         else{
-          return '190px';
+          return '256px';
         }
       }
     });

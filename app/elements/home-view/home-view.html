@@ -18,26 +18,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
         padding: 10px;
       }
-    </style>
-    <h2 class="page-title">Introduction</h2>
-
-    <p class="paper-font-body2">This use case presents a freight forwarding scenario where the condition of sensitive cargo is monitored in real time, and a series of notifications can be used to orchestrate an action plan should an anomaly occur while a shipment is on-route. It supports the BeWhere monitoring beacon, and shows how IoT devices can be integrated to provide real time context.</p>
-  </template>
-  <script>
-  (function() {
-    'use strict';
-
-    Polymer({
-      is: 'home-view',
-
-      properties: {
-        foo: {
-          type: String,
-          value: 'home-view',
-          notify: true
+      :host paper-card ::content .header .title-text{
+        color: #FFF !important;
+      }
+      :host ::content .title-text.over-image.paper-card{
+        text-shadow: 3px 1px 4px #000;
+      }
+      :host ::content .header.paper-card{
+        max-height: 200px;
+        border-bottom: 10px solid #027244;
+      }
+      @media (max-height: 600px) {
+        :host ::content .header.paper-card{
+          max-height: 80px;
         }
       }
-    });
-  })();
+    </style>
+
+    <paper-card heading="Introduction" image="images/highwayHome.jpg">
+      <div class="card-content">
+    <p class="paper-font-body2">This use case presents a freight forwarding scenario where the condition of sensitive cargo is monitored in real time, and a series of notifications can be used to orchestrate an action plan should an anomaly occur while a shipment is on-route. It supports the BeWhere monitoring beacon, and shows how IoT devices can be integrated to provide real time context.</p>
+      </div>
+    </paper-card>
+  </template>
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'home-view',
+
+        properties: {
+          foo: {
+            type: String,
+            value: 'home-view',
+            notify: true
+          }
+        }
+      });
+    })();
   </script>
 </dom-module>

@@ -30,6 +30,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.scrollPageToTop();
     });
 
+    page('/cargo', function () {
+      app.$.demoView.route = 'cargo';
+      app.scrollPageToTop();
+    });
+
+    page('/regions', function () {
+      app.$.demoView.route = 'regions';
+      app.scrollPageToTop();
+    });
+
     page('/notifications', function () {
       app.$.demoView.route = 'notifications';
       app.scrollPageToTop();
@@ -45,8 +55,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.scrollPageToTop();
     });
 
-    page('/alarms', function () {
-      app.$.demoView.route = 'alarms';
+    page('/triggers', function () {
+      app.$.demoView.route = 'triggers';
       app.scrollPageToTop();
     });
 
