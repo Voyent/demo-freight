@@ -133,10 +133,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <iron-selector class="dropdown-content driverSelect" attr-for-selected="name">
                   <template is="dom-repeat" items="{{users}}">
                     <template is="dom-if" if="{{driverTest(item)}}">
-                      <div name$="[[item._id]]">[[item._id]]</div>
+                      <div name$="[[item._id]]" on-click="updateRelation">[[item._id]]</div>
                     </template>
                   </template>
-                  <div name="none">No Driver</div>
+                  <div name="none" on-click="updateRelation">No Driver</div>
                 </iron-selector>
               </paper-dropdown-menu>
             </div>
@@ -200,7 +200,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var relation = {'driver':driver,'cargo':cargo};
 
             var params = {'collection':'accelerometer-relations','id':device,'document':relation};
-
             bridgeit.io.documents.updateDocument(params);
           }, 10);
         },
