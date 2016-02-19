@@ -191,11 +191,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 item.classList.add('liveDevice');
                 item.classList.remove('deadDevice');
                 bridgeit.io.device.startDevice({'macAddress':macAddress});
+                poly.state = 'Stop';
               }
               else {
                 item.classList.add('deadDevice');
                 item.classList.remove('liveDevice');
                 bridgeit.io.device.stopDevice({'macAddress':macAddress});
+                poly.state = 'Start';
               }
             }
           },
