@@ -103,48 +103,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <iron-icon icon="account-circle" item-icon></iron-icon>
                     <div class="item-body" style="display:inline-block; width:20%; vertical-align: middle;">
                         <div>Username: <span>{{item._id}}</span></div>
-                        <!-- Commenting this out for now since the user data is being pulled from mailbox service now.
-                        If we want this information added again we'll have to combine the auth + mailbox records manually
-                        <div>
-                            <small>
-                                <span>{{item.firstname}}</span> <span>{{item.lastname}}</span>
-                                <span>{{item.email}}</span>
-                            </small>
-                        </div>-->
                     </div>
-                    <div style="display:inline-block; width:20%;vertical-align: middle;" class="horizontal-selection">
+                    <div style="display:inline-block; width:40%;vertical-align: middle;" class="horizontal-section">
                         <paper-dropdown-menu>
                             <iron-selector class="dropdown-content roleSelect" attr-for-selected="name"
                                            >
-                                <div on-click="updateUser" name="pm">Project Manager</div>
-                                <div on-click="updateUser" name="driver">Driver</div>
-                                <div on-click="updateUser" name="scheduler">Scheduler</div>
-                                <div on-click="updateUser" name="ip">Insurance Prime</div>
-                                <div on-click="updateUser" name="qa">QA Manager</div>
+                              <div on-click="updateUser" name="manager">Manager</div>
+                              <div on-click="updateUser" name="driver">Driver</div>
+                              <div on-click="updateUser" name="adjuster">Adjuster</div>
                                 <div on-click="updateUser" name="inspector">Inspector</div>
                             </iron-selector>
                         </paper-dropdown-menu>
                     </div>
-                    <div class="routesDiv regionSelect" style="display:inline-block; width:20%;vertical-align: middle;">
+                    <div class="routesDiv regionSelect" style="display:inline-block; width:25%;vertical-align: middle;">
                       <template is="dom-repeat" items="{{regions}}">
                         <paper-checkbox on-click="updateUser" name$="[[item]]">[[item]]</paper-checkbox><br/>
                       </template>
                     </div>
-                    <div class="routesDiv deviceDiv" style="display:inline-block; width:20%; overflow:auto;vertical-align: middle;">
-                      <template is="dom-if" if="{{driverTest(item)}}">
-                        <paper-dropdown-menu>
-                          <iron-selector class="dropdown-content deviceSelect" attr-for-selected="name"
-                          >
-                            <div on-click="updateUser" name="0007802F573B">573B</div>
-                            <div on-click="updateUser" name="0007802F632A">632A</div>
-                            <div on-click="updateUser" name="0007802F643B">643B</div>
-                            <div on-click="updateUser" name="0007802F643D">643D</div>
-                            <div on-click="updateUser" name="0007802F6B0D">6B0D</div>
-                          </iron-selector>
-                        </paper-dropdown-menu>
-                      </template>
-                    </div>
-                    <div style="display:inline-block; width:5%; padding-left: 20px;vertical-align: middle;">
+
+                    <div class="horizontal-section" style="display:inline-block; width:15%; padding-left: 20px;vertical-align: middle;">
                       <paper-toggle-button on-click="updateUser" class="green toggleButton">On Duty</paper-toggle-button>
                     </div>
             </paper-item>
@@ -209,9 +186,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         onDuty: poly.$$('#' + username).querySelector('.toggleButton').getAttribute('checked') !== null
                       }
                     };
-                    if(poly.$$('#' + username).querySelector('.deviceSelect') !== null){
-                        mailbox.info.device = poly.$$('#' + username).querySelector('.deviceSelect').querySelector('.iron-selected').getAttribute('name');
-                    }
+
                     bridgeit.io.mailbox.updateMailbox({id: username, mailbox: mailbox});
                 }, 10);
             },
@@ -235,9 +210,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       d.setAttribute('checked', 'checked');
                     }
                   });
-                  if(user.info.role === 'driver'){
-                    poly.$$('#' + user._id).querySelector('.deviceSelect').setAttribute('selected',user.info.device);
-                  }
+
                   poly.$$('#' + user._id).querySelector('.roleSelect').setAttribute('selected',user.info.role);
                 },10);
               }

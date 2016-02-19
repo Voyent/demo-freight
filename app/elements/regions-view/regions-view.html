@@ -11,31 +11,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../styles/shared-styles.html">
 
-<dom-module id="home-view">
+<dom-module id="regions-view">
   <template>
     <style include="shared-styles">
       :host {
         display: block;
-        padding: 10px;
       }
     </style>
-    <h2 class="page-title">Introduction</h2>
-
-    <p class="paper-font-body2">This use case presents a freight forwarding scenario where the condition of sensitive cargo is monitored in real time, and a series of notifications can be used to orchestrate an action plan should an anomaly occur while a shipment is on-route. It supports the BeWhere monitoring beacon, and shows how IoT devices can be integrated to provide real time context.</p>
+    <template is="dom-if" if="{{visible}}">
+      <h2 class="page-title">Regions</h2>
+      <bridgeit-location-editor id="locationEditor" height="500"></bridgeit-location-editor>
+    </template>
   </template>
   <script>
   (function() {
     'use strict';
 
     Polymer({
-      is: 'home-view',
+      is: 'regions-view',
 
       properties: {
-        foo: {
-          type: String,
-          value: 'home-view',
-          notify: true
+        visible: {
+          type: Boolean,
+          notify: true,
+          observer:'resizeMap'
         }
+      },
+      resizeMap: function() {
+        setTimeout(function() {
+          if (this.$$('#locationEditor')) {
+            this.$$('#locationEditor').resizeMap();
+          }
+        }.bind(this),0);
       }
     });
   })();
