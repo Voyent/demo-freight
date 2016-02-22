@@ -23,14 +23,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         notificationsByUser: {type: Object, notify: true, value: function(){ return {}; }},
         notifications: {type: Array, value: [], notify: true},
         lastNotificationTimestamp: {type: Date, notify: true},
-        notificationCount: { type: Number, notify: true, reflectToAttribute: true, computed: '_computeNotificationCount(notifications.spices)'}
+        notificationCount: { type: Number, notify: true, reflectToAttribute: true, computed: '_computeNotificationCount(notifications.splices)'}
       },
 
       _computeNotificationCount: function(notifications){
         var res = this.notifications ? this.notifications.length : 0;
         console.log('_computeNotificationCount(' + notifications + ') = ' + res);
         return res;
-      }
+      },
+
+
     });
   })();
   </script>

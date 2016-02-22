@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../styles/shared-styles.html">
 
-<dom-module id="alarms-view">
+<dom-module id="triggers-view">
   <template>
     <style is="custom-style" include="shared-styles">
       :host {
@@ -70,7 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
       }
     </style>
-    <h2 class="page-title">Alarms</h2>
+    <h2 class="page-title">Triggers</h2>
     <template is="dom-if" if="{{visible}}">
       <bridgeit-recognizer-editor>
         <bridgeit-recognizer-list></bridgeit-recognizer-list>
@@ -82,7 +82,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       'use strict';
 
       Polymer({
-        is: 'alarms-view',
+        is: 'triggers-view',
 
         properties: {
           visible: {

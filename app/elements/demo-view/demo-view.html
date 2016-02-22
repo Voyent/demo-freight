@@ -56,7 +56,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       paper-drawer-panel ::content #drawer paper-toolbar ::content #topBar{
         background-image: url(../../images/highwayCrop.jpg);
-        background-size: 155%;
+        background-size: 107%;
         text-shadow: 1px 1px 1px #000;
       }
       paper-toolbar.tall .app-name {
@@ -70,6 +70,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 50px;
         margin: -20px 15px -20px -20px;
       }
+      #mainToolbar{
+        color:black;
+      }
+
       #mainToolbar .middle-container  {
         height: 100%;
         margin-left: 15px;
@@ -311,7 +315,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template is="dom-if" if="{{visible}}">
       <iron-media-query query="(min-width: 600px) and (max-width: 800px)" query-matches="{{vgaWidth}}"></iron-media-query>
-      <paper-drawer-panel id="paperDrawerPanel" drawer-width="{{drawerWidth}}">
+      <paper-drawer-panel id="paperDrawerPanel" drawer-width="200px">
       <!-- Drawer Scroll Header Panel -->
       <paper-scroll-header-panel drawer fixed>
 
@@ -335,24 +339,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <span>Users</span>
             </a>
 
-            <a data-route="locations" on-click="onLocationsRouteClick">
+            <a data-route="cargo" on-click="onCargoRouteClick">
               <span class="demo-step-badge">2</span>
-                <span>Locations</span>
+              <span>Cargo</span>
             </a>
 
-            <a data-route="context" on-click="onContextRouteClick">
+            <a data-route="regions" on-click="onRegionsRouteClick">
               <span class="demo-step-badge">3</span>
-              <span>Context</span>
+                <span>Regions</span>
             </a>
 
-            <a data-route="queries" on-click="onQueriesRouteClick">
+            <a data-route="locations" on-click="onLocationsRouteClick">
               <span class="demo-step-badge">4</span>
-              <span>Queries</span>
+              <span>Locations</span>
             </a>
 
-            <a data-route="alarms" on-click="onAlarmsRouteClick">
+            <a data-route="triggers" on-click="onTriggersRouteClick">
               <span class="demo-step-badge">5</span>
-              <span>Alarms</span>
+              <span>Triggers</span>
             </a>
 
             <a data-route="actions" on-click="onActionsRouteClick">
@@ -360,29 +364,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <span>Actions</span>
             </a>
 
-            <a data-route="routes" on-click="onRoutesRouteClick">
-              <span class="demo-step-badge">7</span>
-              <span>Routes</span>
-            </a>
-
             <a data-route="accel" on-click="onAccelRouteClick">
-              <span class="demo-step-badge">8</span>
+              <span class="demo-step-badge">7</span>
               <span>Accelerometer</span>
             </a>
 
             <a data-route="notifications" on-click="onNotificationsRouteClick">
-              <span class="demo-step-badge">9</span>
+              <span class="demo-step-badge">8</span>
               <span>Notifications</span>
             </a>
 
             <a data-route="events" on-click="onEventsRouteClick">
-              <span class="demo-step-badge">10</span>
+              <span class="demo-step-badge">9</span>
               <span>Events</span>
             </a>
 
             <a data-route="logs" on-click="onLogsRouteClick">
-              <span class="demo-step-badge">11</span>
+              <span class="demo-step-badge">10</span>
               <span>Logs</span>
+            </a>
+
+            <a data-route="queries" on-click="onQueriesRouteClick">
+              <span class="demo-step-badge">11</span>
+              <span>Queries</span>
             </a>
 
           </template>
@@ -433,7 +437,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- Application sub title -->
           <div class="bottom bottom-container center horizontal layout hidden-phone">
-            <div class="bottom-title paper-font-subhead"><span class="quote">&ldquo;</span>No highway too long.<span class="quote">&rdquo;</span></div>
+            <div class="bottom-title paper-font-subhead"><span class="quote">&ldquo;</span>Delivering Your Sensitive Cargo<span class="quote">&rdquo;</span></div>
           </div>
 
         </paper-toolbar>
@@ -449,36 +453,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <template is="dom-if" if="{{isAdmin}}">
 
               <section data-route="users">
-                <users-view visible="{{isEqual('users', route)}}" users="{{users}}"></users-view>
+                <users-view visible="{{isEqual('users', route)}}" ></users-view>
               </section>
 
-              <section data-route="locations">
-                <locations-view visible="{{isEqual('locations', route)}}"></locations-view>
+              <section data-route="regions">
+                <regions-view visible="{{isEqual('regions', route)}}"></regions-view>
               </section>
 
               <section data-route="queries">
                 <queries-view visible="{{isEqual('queries', route)}}">></queries-view>
               </section>
 
-              <section data-route="alarms">
-                <alarms-view visible="{{isEqual('alarms', route)}}">></alarms-view>
+              <section data-route="triggers">
+                <triggers-view visible="{{isEqual('triggers', route)}}">></triggers-view>
               </section>
 
               <section data-route="actions">
                 <actions-view visible="{{isEqual('actions', route)}}">></actions-view>
               </section>
 
-              <section data-route="routes">
-                <routes-view visible="{{isEqual('routes', route)}}"></routes-view>
+              <section data-route="locations">
+                <locations-view visible="{{isEqual('locations', route)}}"></locations-view>
               </section>
 
-              <section data-route="context">
-                <context-view visible="{{isEqual('context', route)}}">
-                </context-view>
+              <section data-route="cargo">
+                <cargo-view visible="{{isEqual('cargo', route)}}">
+                </cargo-view>
               </section>
 
               <section data-route="accel">
-                <accel-view visible="{{isEqual('accel', route)}}" users="{{users}}"></accel-view>
+                <accel-view visible="{{isEqual('accel', route)}}""></accel-view>
               </section>
 
               <section data-route="events">
@@ -673,32 +677,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.onDataRouteClick(e, 'users');
       },
 
-      onLocationsRouteClick: function(e){
-        this.onDataRouteClick(e, 'locations');
+      onRegionsRouteClick: function(e){
+        this.onDataRouteClick(e, 'regions');
       },
 
       onQueriesRouteClick: function(e){
         this.onDataRouteClick(e, 'queries');
       },
 
-      onAlarmsRouteClick: function(e){
-        this.onDataRouteClick(e, 'alarms');
+      onTriggersRouteClick: function(e){
+        this.onDataRouteClick(e, 'triggers');
       },
 
       onActionsRouteClick: function(e){
         this.onDataRouteClick(e, 'actions');
       },
 
-      onRoutesRouteClick: function(e){
-        this.onDataRouteClick(e, 'routes');
+      onLocationsRouteClick: function(e){
+        this.onDataRouteClick(e, 'locations');
       },
 
       onAccelRouteClick: function(e){
         this.onDataRouteClick(e, 'accel');
       },
 
-      onContextRouteClick: function(e){
-        this.onDataRouteClick(e, 'context');
+      onCargoRouteClick: function(e){
+        this.onDataRouteClick(e, 'cargo');
       },
 
       onLogsRouteClick: function(e){

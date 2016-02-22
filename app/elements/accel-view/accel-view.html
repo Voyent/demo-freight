@@ -39,6 +39,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           padding-right: 20px;
         }
 
+        .liveDevice {
+          background: #99ff99
+        }
+
       paper-menu.paper-menu-0{
         background: #E4E4E4;
       }
@@ -55,15 +59,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <h2 class="page-title">Accelerometer Data</h2>
     <template is="dom-if" if="{{visible}}">
-      <div style="width:100%;max-height:200px;">
+      <div style="width:100%;max-height:400px;">
         <div style="width:77%;display:inline-block;padding:0 5px;vertical-align:middle;">
           <paper-menu id="scenarioMenu">
             <template is="dom-repeat" items="{{scenarios}}">
               <paper-item id="[[item._id]]" on-click="populate">[[item._id]]</paper-item>
             </template>
+            <paper-item id="a0007802F573B" value="0007802F573B" on-click="clearData" class="deviceSelect">0007802F573B (Live Data)</paper-item>
+            <paper-item id="a0007802F632A" value="0007802F632A" on-click="clearData" class="deviceSelect">0007802F632A (Live Data)</paper-item>
+            <paper-item id="a0007802F643B" value="0007802F643B" on-click="clearData" class="deviceSelect">0007802F643B (Live Data)</paper-item>
+            <paper-item id="a0007802F643D" value="0007802F643D" on-click="clearData" class="deviceSelect">0007802F643D (Live Data)</paper-item>
+            <paper-item id="a0007802F6B0D" value="0007802F6B0D" on-click="clearData" class="deviceSelect">0007802F6B0D (Live Data)</paper-item>
           </paper-menu>
       </div><div style="width:20%;display:inline-block;padding:0;vertical-align:middle;">
-        <paper-button raised on-click="playData">Play</paper-button>
+        <paper-button raised on-click="playData">[[state]]</paper-button>
       </div>
       </div>
       <br/><br/>
@@ -78,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </tr>
         <template is="dom-repeat" items="{{events}}">
           <tr style="text-align: center">
-            <td>[[index]]</td><td>[[item.delay]]</td><td>[[item.event.data.MAC]]</td><td>[[item.event.data.distance]]</td><td>[[item.event.data.impact]]</td>
+            <td>[[index]]</td><td>[[item.delay]]</td><td>[[item.event.data.macAddress]]</td><td>[[item.event.data.distance]]</td><td>[[item.event.data.impact]]</td>
           </tr>
         </template>
         </table>
@@ -113,6 +122,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   type: Array,
                   notify: true,
                   value: []
+                },
+                state:{
+                  type: String,
+                  notify: true,
+                  value: 'Start'
+                },
+                devices: {
+                  type: Array,
+                  notify: false,
+                  value: ['0007802F573B', '0007802F632A', '0007802F643B', '0007802F643D', '0007802F6B0D']
                 }
             },
 
@@ -123,6 +142,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _visibleChanged: function () {
                 if (this.visible) {
                     poly.loadScenarios();
+                    poly.checkLiveDevices();
                 }
             },
 
@@ -136,12 +156,67 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           populate:function(e){
             var model = e.model.__data__.item;
             poly.events = model.events;
+            poly.state = 'Start';
+          },
+
+          clearData:function(){
+            poly.events = [];
+            var item = poly.$$('#scenarioMenu').querySelector('.iron-selected');
+            if(item.className.indexOf('deadDevice') !== -1){
+              poly.state = 'Start';
+            }
+            else{
+              poly.state = 'Stop';
+            }
           },
 
           playData:function(){
-            var scenario = poly.$$('#scenarioMenu').querySelector('.iron-selected').getAttribute('id');
-            var params = {'event':{'event':'scenarioStart','service':'freight','type':'metricsPush', 'data':{'id':scenario}}};
-            bridgeit.io.metrics.createCustomEvent(params);
+            var item = poly.$$('#scenarioMenu').querySelector('.iron-selected');
+            var canned = item.className.indexOf('deviceSelect') === -1;
+            if(canned) {
+              var scenario = item.getAttribute('id');
+              var params = {
+                'event': {
+                  'event': 'scenarioStart',
+                  'service': 'freight',
+                  'type': 'metricsPush',
+                  'data': {'id': scenario}
+                }
+              };
+              bridgeit.io.metrics.createCustomEvent(params);
+            }
+            else{
+              var macAddress = item.getAttribute('id').substring(1);
+              if(item.className.indexOf('deadDevice') !== -1){
+                item.classList.add('liveDevice');
+                item.classList.remove('deadDevice');
+                bridgeit.io.device.startDevice({'macAddress':macAddress});
+                poly.state = 'Stop';
+              }
+              else {
+                item.classList.add('deadDevice');
+                item.classList.remove('liveDevice');
+                bridgeit.io.device.stopDevice({'macAddress':macAddress});
+                poly.state = 'Start';
+              }
+            }
+          },
+
+          checkLiveDevices:function(){
+
+            bridgeit.io.device.getRunningDevices({}).then(function (devices) {
+              for(var i = 0; i < poly.devices.length; i++){
+                var currentDevice = poly.$$('#a'+poly.devices[i]);
+                if(devices.running.indexOf(poly.devices[i]) === -1){
+                  currentDevice.classList.add('deadDevice');
+                }
+                else{
+                  currentDevice.classList.add('liveDevice');
+                }
+              }
+            },function(reason){
+              console.log('Error in getting running devices:  ' + reason);
+            });
           }
         });
     })();
