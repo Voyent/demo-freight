@@ -18,71 +18,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             display: block;
         }
 
-        paper-menu {
-            padding: 0;
+        .avatar {
+          display: inline-block;
+          box-sizing: border-box;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
         }
 
-        paper-icon-item {
-            width: 100%;
-            display: block;
-            border-bottom: 1px solid #eee;
+        paper-icon-item{
+            background-color: #FFF;
+            border-bottom: 1px solid #EEE;
+        }
+
+        paper-icon-item ::content > div{
+            padding: 20px;
+        }
+
+        .username{
+            width: 100px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        iron-selector ::content > * {
             padding: 8px;
-        }
-
-        iron-icon {
-            vertical-align: top;
-        }
-
-        iron-selector > * {
-            padding: 8px;
-        }
-
-        .horizontal-section {
-            padding: 0;
-        }
-
-        .iron-selected {
-            background-color: var(--google-blue-500);
-            color: white;
-        }
-
-        .item-body {
-            display: inline-block;
-        }
-
-        paper-dropdown-menu {
-            text-align: left;
-            margin: auto;
-            width: 180px;
-        }
-
-        paper-dropdown-menu.letters {
-            width: 90px;
-        }
-
-        paper-tabs {
-            width: 400px;
-        }
-
-        .horizontal-section {
-            text-align: center;
-        }
-
-        .nounderline {
-
-        }
-
-        -paper-input-container-underline: {
-            display: none;
-        }
-
-        paper-toggle-button {
-            margin-bottom: 40px;
-            display: block;
-        }
-
-        paper-toggle-button:last-child {
-            margin-bottom: 0;
+            min-width: 100px;
         }
 
         paper-toggle-button.green {
@@ -98,13 +59,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template is="dom-if" if="{{visible}}">
         <paper-material>
             <template is="dom-repeat" items="{{users}}">
-                <paper-item id="[[item._id]]" class="userParent"
-                            style="border-bottom: 1px solid black; padding-bottom:7px; height:200px;">
-                    <iron-icon icon="account-circle" item-icon></iron-icon>
-                    <div class="item-body" style="display:inline-block; width:20%; vertical-align: middle;">
-                        <div>Username: <span>{{item._id}}</span></div>
+                <paper-icon-item id="[[item._id]]" class="userParent">
+                    <iron-icon icon="account-circle" item-icon class="avatar"></iron-icon>
+                    <div class="item-body username">
+                        <div class="flex">{{item._id}}</div>
                     </div>
-                    <div style="display:inline-block; width:40%;vertical-align: middle;" class="horizontal-section">
+                    <div class="flex">
                         <paper-dropdown-menu>
                             <iron-selector class="dropdown-content roleSelect" attr-for-selected="name"
                                            >
@@ -115,19 +75,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </iron-selector>
                         </paper-dropdown-menu>
                     </div>
-                    <div class="routesDiv regionSelect" style="display:inline-block; width:25%;vertical-align: middle;">
+                    <div class="flex routesDiv regionSelect">
                       <template is="dom-repeat" items="{{regions}}">
                         <paper-checkbox on-click="updateUser" name$="[[item]]">[[item]]</paper-checkbox><br/>
                       </template>
                     </div>
-
-                    <div class="horizontal-section" style="display:inline-block; width:15%; padding-left: 20px;vertical-align: middle;">
+                    <div class="flex">
                       <paper-toggle-button on-click="updateUser" class="green toggleButton">On Duty</paper-toggle-button>
                     </div>
-            </paper-item>
+                </paper-icon-item>
+            </template>
+        </paper-material>
     </template>
-    </paper-material>
-</template>
 </template>
 <script>
     (function () {

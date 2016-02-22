@@ -105,11 +105,16 @@
 
     window.addEventListener('bridgeit-access-token-refreshed', function(e){
       console.log('demo app received event bridgeit-access-token-refreshed', e);
-      bridgeit.xio.push.refreshConnection();
+      bridgeit.xio.push.refreshConnection();      
     });
 
     window.addEventListener('bridgeit-session-expired', function(e){
       console.log('demo app received event bridgeit-session-expired', e);
+      bridgeit.xio.push.disconnect();
+    });
+
+    window.addEventListener('bridgeit-session-disconnected', function(e){
+      console.log('demo app received event bridgeit-session-disconnected', e);
       bridgeit.xio.push.disconnect();
     });
 

@@ -54,6 +54,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .sidebar {
           background: #444444;
       }
+      paper-toolbar#mainToolbar{
+        background-color: #5C6F38;
+      }
+      #mainToolbar ::content #topBar{
+        color: #303A1D;
+      }
+      #mainToolbar ::content #middleBar, #mainToolbar ::content #bottomBar{
+        color: #FFF;
+      }
+      #mainToolbar ::content #middleBar{
+        text-shadow: 1px 1px 1px #000;
+      }
       paper-drawer-panel ::content #drawer paper-toolbar ::content #topBar{
         background-image: url(../../images/highwayCrop.jpg);
         background-size: 107%;
@@ -70,10 +82,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 50px;
         margin: -20px 15px -20px -20px;
       }
-      #mainToolbar{
-        color:black;
-      }
-
       #mainToolbar .middle-container  {
         height: 100%;
         margin-left: 15px;
@@ -407,7 +415,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-scroll-header-panel main id="headerPanelMain" condenses keep-condensed-header>
 
         <!-- Main Toolbar -->
-        <paper-toolbar id="mainToolbar" class="tall" style="background-color:#E4E4E4">
+        <paper-toolbar id="mainToolbar" class="tall">
           <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
           <span class="flex"></span>
 
@@ -482,7 +490,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </section>
 
               <section data-route="accel">
-                <accel-view visible="{{isEqual('accel', route)}}""></accel-view>
+                <accel-view visible="{{isEqual('accel', route)}}"></accel-view>
               </section>
 
               <section data-route="events">
