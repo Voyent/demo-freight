@@ -12,7 +12,7 @@
     "bridgeit-web-components": "#master",
     "bridgeit.xio.js": "https://github.com/bridgeit/bridgeit.xio.js.git#gh-pages",
     "jquery": "#~2.1.3",
-	"awesomplete": "https://github.com/LeaVerou/awesomplete.git#^1.0.0"
+    "awesomplete": "https://github.com/LeaVerou/awesomplete.git#^1.0.0"
   },
   "devDependencies": {
     "web-component-tester": "*"
@@ -22,6 +22,6 @@
     "paper-menu": "4fecb43601",
     "polymer": "^1.2.1",
     "es6-promise": "~3.0.2",
-    "bridgeit.js": "1.0.7"
+    "bridgeit.js": "gh-pages"
   }
 }
