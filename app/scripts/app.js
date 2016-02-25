@@ -25,9 +25,9 @@
         document.querySelector('#caching-complete').show();
       }
     };
-    
+
     function setupNotificationListener(){
-      bridgeit.xio.push.attach('http://'+app.host+'/pushio/demos/realms/freight', bridgeit.io.auth.getLastKnownUsername());
+      bridgeit.xio.push.attach('http://'+app.host+'/pushio/demos/realms/' + bridgeit.io.auth.getLastKnownRealm(), bridgeit.io.auth.getLastKnownUsername());
       bridgeit.xio.push.addListener(function (payload) {
         console.log('Notification: ', payload);
 
@@ -91,7 +91,7 @@
         }, 5000);
       }
     });
-    
+
     // Startup the Notification Push Listener after login
     window.addEventListener('onAfterLogin', function(){
       console.log('onAfterLogin callback: configuring notifications');
@@ -105,7 +105,7 @@
 
     window.addEventListener('bridgeit-access-token-refreshed', function(e){
       console.log('demo app received event bridgeit-access-token-refreshed', e);
-      bridgeit.xio.push.refreshConnection();      
+      bridgeit.xio.push.refreshConnection();
     });
 
     window.addEventListener('bridgeit-session-expired', function(e){
