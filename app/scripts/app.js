@@ -27,19 +27,36 @@
       }
     };
 
+    function tryParseJSON (jsonString){
+      try {
+        var o = JSON.parse(jsonString);
+        if (o && typeof o === 'object' && o !== null) {
+          return o;
+        }
+      }
+      catch (e) { }
+
+      return false;
+    }
+
     function setupNotificationListener(){
       bridgeit.xio.push.attach('http://'+app.host+'/pushio/demos/realms/' + bridgeit.io.auth.getLastKnownRealm(), bridgeit.io.auth.getLastKnownUsername());
       bridgeit.xio.push.addListener(function (payload) {
         console.log('Notification: ', JSON.stringify(payload));
 
         //normalize payload TODO!!
+        if(tryParseJSON(payload.message)){
+          payload.message = JSON.parse(payload.message);
+        }
+
         if( payload.message && typeof payload.message === 'object' && payload.message.message){
-          /**if(payload.message.options){
+          if(payload.message.options){
             payload.options = payload.message.options;
           }
           if(payload.message.event){
             payload.event = payload.message.event;
-          }*/
+          }
+
           payload.message = payload.message.message;
         }
 
@@ -80,12 +97,11 @@
           console.warn('could not locate demoData element to store user notification');
         }
         if(window.location.pathname.indexOf('client.html')!== -1){
-          var messageObject = JSON.parse(payload.message);
-          if(messageObject.options !== null && messageObject.event !== null) {
+          if(payload.options !== null && payload.event !== null) {
             var data = {};
-            data.message = messageObject.message;
-            data.options = messageObject.options;
-            data.event = messageObject.event;
+            data.message = payload.message;
+            data.options = payload.options;
+            data.event = payload.event;
             document.getElementById('solicit').setAttribute('data',JSON.stringify(data));
           }
         }
