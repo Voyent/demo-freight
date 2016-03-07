@@ -16,6 +16,7 @@
     // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
     var app = document.querySelector('#app');
 
+
     //set default host;
     app.host = 'dev.bridgeit.io';
 
@@ -29,10 +30,16 @@
     function setupNotificationListener(){
       bridgeit.xio.push.attach('http://'+app.host+'/pushio/demos/realms/' + bridgeit.io.auth.getLastKnownRealm(), bridgeit.io.auth.getLastKnownUsername());
       bridgeit.xio.push.addListener(function (payload) {
-        console.log('Notification: ', payload);
+        console.log('Notification: ', JSON.stringify(payload));
 
         //normalize payload TODO!!
         if( payload.message && typeof payload.message === 'object' && payload.message.message){
+          /**if(payload.message.options){
+            payload.options = payload.message.options;
+          }
+          if(payload.message.event){
+            payload.event = payload.message.event;
+          }*/
           payload.message = payload.message.message;
         }
 
@@ -72,7 +79,18 @@
         else{
           console.warn('could not locate demoData element to store user notification');
         }
+        if(window.location.pathname.indexOf('client.html')!== -1){
+          var messageObject = JSON.parse(payload.message);
+          if(messageObject.options !== null && messageObject.event !== null) {
+            var data = {};
+            data.message = messageObject.message;
+            data.options = messageObject.options;
+            data.event = messageObject.event;
+            document.getElementById('solicit').setAttribute('data',JSON.stringify(data));
+          }
+        }
       });
+
       window.initializePushGroups(); //delegates to index.html for admins or client.html for regular users
     }
 

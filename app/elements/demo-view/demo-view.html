@@ -401,6 +401,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <template is="dom-if" if="{{isUser}}">
 
+            <a data-route="home" on-click="onHomeRouteClick">
+              <iron-icon icon="home"></iron-icon>
+              <span>Home</span>
+            </a>
             <a data-route="notifications" on-click="onNotificationsRouteClick">
               <span class="demo-step-badge">1</span>
               <span>Notifications</span>
@@ -727,7 +731,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return;
         }
         var _this = this;
-        bridgeit.xio.push.registerCloudPush(this.host, 'demos', 'freight', bridgeit.io.auth.getLastKnownUsername()).then(function(){
+        bridgeit.xio.push.registerCloudPush(this.host, 'demos', bridgeit.io.auth.getLastKnownRealm(), bridgeit.io.auth.getLastKnownUsername()).then(function(){
           console.log('registered for cloud push promise returned');
           _this.cloudPushRegistered = true;
           _this.message = 'Registered for Cloud Push notifications';
@@ -751,7 +755,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.handleRegisterCloudPush();
           }
           else{
-            bridgeit.xio.push.unregisterCloudPush(this.host, 'demos', 'freight');
+            bridgeit.xio.push.unregisterCloudPush(this.host, 'demos', bridgeit.io.auth.getLastKnownRealm());
             this.cloudPushRegistered = false;
             var _this = this;
             setTimeout(function(){
