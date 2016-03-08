@@ -102,7 +102,17 @@
             data.message = payload.message;
             data.options = payload.options;
             data.event = payload.event;
-            document.getElementById('solicit').setAttribute('data',JSON.stringify(data));
+            var solicit = document.getElementById('solicit');
+            solicit.setAttribute('data',JSON.stringify(data));
+            setTimeout(function(){
+              var headerHeight = solicit.$$('.paper-header.bridgeit-solicit').clientHeight;
+              var buttonHeight = solicit.$$('.selectionButton').clientHeight;
+              var totalHeight = headerHeight + buttonHeight + 15;
+              var solicitDiv = document.getElementById('solicitDiv');
+              solicitDiv.style.height = totalHeight+'px';
+              solicitDiv.style.marginLeft = '-' + solicitDiv.clientWidth/2 + 'px';
+            },200);
+
           }
         }
       });
