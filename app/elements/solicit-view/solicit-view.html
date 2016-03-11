@@ -1,0 +1,295 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../styles/shared-styles.html">
+
+<dom-module id="solicit-view">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      .notifications paper-item{
+        font-size: 12px;
+      }
+      .notifications paper-item cell{
+        display: inline-block;
+        padding: 2px;
+        white-space: normal;
+      }
+      .notification-ts{
+        width: 20%;
+      }
+      .notification-group{
+        width: 40%;
+      }
+      .notification-message{
+        width: 60%;
+      }
+      paper-card{
+        width: 100%;
+      }
+      paper-card .card-content.message-list {
+        padding: 0;
+      }
+      .user-card-header{
+        background-color: rgba(2, 114, 68, 0.95);
+        color: #FFF;
+      }
+      paper-toggle-button{
+        float: right;
+        margin-top: -40px;
+      }
+      @media (max-width: 400px){
+        paper-toggle-button{
+          margin-top: -51px;
+          margin-right: -10px;
+        }
+        paper-toggle-button toggle-label{
+          width: 50px;
+          line-height: 14px;
+        }
+      }
+      paper-material{
+        padding: 20px;
+        background-color: #FFF;
+      }
+      paper-item-body ::content > * {
+        white-space: normal;
+      }
+      paper-icon-item{
+        border-bottom: 1px solid #EEE;
+        padding: 10px 0;
+      }
+      paper-icon-item:first-child{
+        padding-top: 0;
+      }
+      paper-icon-item:last-of-type{
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .solicitDiv, .containerDiv{
+        width:100%;
+        height:120px;
+        padding: 0 0 20px;
+
+      }
+
+      #solicit {
+
+        --solicit-header-style: {
+          background-color: #5C6F38;
+          color: white;
+          transition: height 0.2s;
+          text-align: center;
+          text-size:small;
+        };
+
+        --solicit-body-style: {
+          background-color: white;
+          margin: 12px;
+          height: 100%;
+          width: 100%;
+        }
+
+      }
+
+      .topElement{
+        z-index: 5;
+      }
+    </style>
+    <h2 class="page-title">Current Message:</h2>
+    <div class="containerDiv" style="position:relative; display:table;">
+      <div id="coverDiv" style="text-align:center; display: table-cell; vertical-align: middle; position:relative; left:0; top:0; width:100%; height:100%; background-color: #fafafa">
+        <h3>None</h3>
+      </div>
+      <div id="solicitDiv" class="solicitDiv topElement" style="position:absolute; left:0; top:0; height:100%; width:100%">
+        <bridgeit-solicit id="solicit" host="dev.bridgeit.io" usepush></bridgeit-solicit>
+      </div>
+    </div>
+    <h2 class="page-title"><span>{{notificationCount}}</span>&nbsp;Past Messages:</h2>
+    <paper-toggle-button checked="{{groupByUser}}">Group by User</paper-toggle-button>
+
+    <template is="dom-if" if="{{!groupByUser}}">
+      <template is="dom-if" if="{{!hasNotifications}}">
+        <paper-material>No notifications yet...</paper-material>
+      </template>
+      <template is="dom-if" if="{{hasNotifications}}">
+        <paper-material>
+          <paper-menu class="notifications">
+            <template id="iterator" is="dom-repeat" items="[[notifications]]" sort="sortNotifications">
+              <paper-icon-item class="notificationInfo">
+                <iron-icon icon="communication:message" item-icon></iron-icon>
+                <paper-item-body two-line>
+                  <div><span>{{item.message}}</span></div>
+                  <div secondary>
+                  <span>{{item.time}}</span>
+                  </div>
+                  <div secondary>
+                    <span>Response given:</span><span> {{getResponse(item)}}</span>
+                  </div>
+                </paper-item-body>
+              </paper-icon-item>
+            </template>
+          </paper-menu>
+        </paper-material>
+      </template>
+    </template>
+    <template is="dom-if" if="{{groupByUser}}">
+      <template is="dom-repeat" items="{{_decoratedUserNotifications}}">
+        <paper-card>
+          <div class="card-content user-card-header">
+            <iron-icon icon="social:person" item-icon></iron-icon>
+            <span>{{item.username}}</span>
+            <small style="float:right"><span>{{item.notifications.length}}</span> Notifications</small>
+          </div>
+          <div class="card-content message-list">
+            <paper-menu>
+              <template is="dom-repeat" items="{{item.notifications}}" as="msg">
+                <paper-item>
+                  <paper-item-body two-line>
+                    <div>{{msg.message}}</div>
+                    <div secondary>
+                      <span>{{msg.time}}</span>
+                    </div>
+                  </paper-item-body>
+                </paper-item>
+              </template>
+            </paper-menu>
+          </div>
+        </paper-card>
+      </template>
+    </template>
+  </template>
+  <script>
+  (function() {
+    //'use strict';
+
+    var poly;
+
+    Polymer({
+      is: 'solicit-view',
+
+      properties: {
+        visible: {
+          type: Boolean,
+          notify: true,
+          observer: '_visibleChanged'
+        },
+        notifications: { type: Array, notify: true},
+        groupByUser: { type: Boolean, notify: true, value: false},
+        users: {
+          type: Array,
+          notify: true
+        },
+        notificationsByUser: {
+          type: Object,
+          notify: true
+        },
+        _decoratedUserNotifications: {
+          type: Array,
+          computed: '_computeDecoratedUserNotifications(users, notificationsByUser, lastNotificationTimestamp)'
+        },
+        lastNotificationTimestamp: {
+          type: Number
+        },
+        notificationCount: { type: Number, notify: true},
+        hasNotifications: { type: Boolean, notify: true, computed: '_computeHasNotifications(notifications.splices)'},
+
+      },
+
+
+      ready: function () {
+        poly = this;
+      },
+
+      _visibleChanged: function () {
+        if (this.visible) {
+          if(poly.hasNotifications && !poly.notifications[poly.notifications.length-1].response){
+            var event = poly.notifications[poly.notifications.length-1];
+            var data = {};
+            data.message = event.message;
+            data.options = event.options;
+            data.event = event.event;
+            var solicit = document.getElementById('solicit');
+            solicit.setAttribute('data',JSON.stringify(data));
+            setTimeout(function(){
+              var headerHeight = solicit.$$('.paper-header.bridgeit-solicit').clientHeight;
+              var buttonHeight = solicit.$$('.selectionButton').clientHeight;
+              var totalHeight = headerHeight + buttonHeight + 15;
+              var solicitDiv = document.getElementById('solicitDiv');
+              if(totalHeight > solicit.clientHeight) {
+                solicitDiv.style.height = totalHeight + 'px';
+              }
+            },100);
+            setTimeout(function(){
+              /* jshint ignore:start*/
+              var buttons = document.getElementsByClassName('selectionButton');
+              for (var i = 0; i < buttons.length; i++){
+                buttons[i].onclick = function(){
+                  poly.updateResponse(this.textContent.trim());
+                };
+              }
+              /* jshint ignore:end*/
+            },200);
+          }
+        }
+      },
+
+      sortNotifications: function(a,b) {
+        if (a.time > b.time) { return -1; }
+        else if (a.time < b.time) { return 1; }
+        return 0;
+      },
+
+      _computeDecoratedUserNotifications: function(users, notificationsByUser, lastNotificationTimestamp){
+        var list = [];
+        list.lastUpdated = lastNotificationTimestamp;
+        var usernames = users.map(function(user){return user.username;});
+        usernames.sort();
+        usernames.forEach(function(username){
+          var userNotifications = notificationsByUser[username] || [];
+          list.push({username: username, notifications: userNotifications});
+        });
+        return list;
+      },
+
+      _computeHasNotifications: function(notifications){
+        console.log('_computeHasNotifications(' + notifications + ')');
+        return this.notifications && this.notifications.length;
+      },
+
+      getResponse: function(item){
+        if(item.response){
+          return item.response;
+        }
+        else{
+          return 'None';
+        }
+      },
+
+      updateResponse: function(response){
+        var tempNote = poly.notifications;
+        tempNote[poly.notifications.length -1].response = response;
+        poly.set('notifications', []);
+        setTimeout(function(){
+          poly.set('notifications',tempNote);
+        },100);
+      }
+
+
+
+
+    });
+  })();
+  </script>
+</dom-module>

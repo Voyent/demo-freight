@@ -96,8 +96,8 @@
         else{
           console.warn('could not locate demoData element to store user notification');
         }
-        if(window.location.pathname.indexOf('client.html')!== -1){
-          if(payload.options !== null && payload.event !== null) {
+        if(window.location.href.indexOf('client.html#!/solicit')!== -1){
+          if(payload.options && payload.event) {
             var data = {};
             data.message = payload.message;
             data.options = payload.options;
@@ -109,10 +109,19 @@
               var buttonHeight = solicit.$$('.selectionButton').clientHeight;
               var totalHeight = headerHeight + buttonHeight + 15;
               var solicitDiv = document.getElementById('solicitDiv');
-              solicitDiv.style.height = totalHeight+'px';
-              solicitDiv.style.marginLeft = '-' + solicitDiv.clientWidth/2 + 'px';
-            },200);
+              if(totalHeight > solicit.clientHeight) {
+                solicitDiv.style.height = totalHeight + 'px';
+              }
+              /* jshint ignore:start*/
+              var buttons = document.getElementsByClassName('selectionButton');
+              for (var i = 0; i < buttons.length; i++){
+                buttons[i].onclick = function(){
+                  document.querySelector('solicit-view').updateResponse(this.textContent.trim());
+                };
+              }
+              /* jshint ignore:end*/
 
+            },100);
           }
         }
       });

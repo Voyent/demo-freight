@@ -405,8 +405,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <iron-icon icon="home"></iron-icon>
               <span>Home</span>
             </a>
-            <a data-route="notifications" on-click="onNotificationsRouteClick">
+            <a data-route="solicit" on-click="onSolicitRouteClick">
               <span class="demo-step-badge">1</span>
+              <span>Messages</span>
+            </a>
+            <a data-route="notifications" on-click="onNotificationsRouteClick">
+              <span class="demo-step-badge">2</span>
               <span>Notifications</span>
             </a>
 
@@ -518,6 +522,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               <section data-route="notifications">
                 <notifications-view notifications="[[notifications]]"></notifications-view>
+              </section>
+
+              <section data-route="solicit">
+                <solicit-view notifications="[[notifications]]" visible="{{isEqual('solicit', route)}}"></solicit-view>
               </section>
 
             </template>
@@ -683,6 +691,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       onNotificationsRouteClick: function(e){
         this.onDataRouteClick(e, 'notifications');
+      },
+
+      onSolicitRouteClick: function(e){
+        this.onDataRouteClick(e, 'solicit');
       },
 
       onUsersRouteClick: function(e){
