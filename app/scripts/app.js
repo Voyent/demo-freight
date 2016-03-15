@@ -96,8 +96,7 @@
         else{
           console.warn('could not locate demoData element to store user notification');
         }
-        if(window.location.href.indexOf('client.html#!/solicit')!== -1){
-          if(payload.options && payload.event) {
+        if(window.location.pathname.indexOf('client.html')!== -1 && window.location.hash.indexOf('#!/solicit') !== -1 && payload.options){
             var data = {};
             data.message = payload.message;
             data.options = payload.options;
@@ -122,7 +121,6 @@
               /* jshint ignore:end*/
 
             },100);
-          }
         }
       });
 

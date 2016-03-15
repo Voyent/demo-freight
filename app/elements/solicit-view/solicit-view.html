@@ -116,8 +116,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <bridgeit-solicit id="solicit" host="dev.bridgeit.io" usepush></bridgeit-solicit>
       </div>
     </div>
+    <br/>
     <h2 class="page-title"><span>{{notificationCount}}</span>&nbsp;Past Messages:</h2>
-    <paper-toggle-button checked="{{groupByUser}}">Group by User</paper-toggle-button>
+
 
     <template is="dom-if" if="{{!groupByUser}}">
       <template is="dom-if" if="{{!hasNotifications}}">
@@ -213,7 +214,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _visibleChanged: function () {
-        if (this.visible) {
+        if (poly.visible) {
           if(poly.hasNotifications && !poly.notifications[poly.notifications.length-1].response){
             var event = poly.notifications[poly.notifications.length-1];
             var data = {};
