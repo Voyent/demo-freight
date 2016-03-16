@@ -162,6 +162,7 @@
     window.addEventListener('bridgeit-session-expired', function(e){
       console.log('demo app received event bridgeit-session-expired', e);
       bridgeit.xio.push.disconnect();
+      window.alert('Session Expired');
     });
 
     window.addEventListener('bridgeit-session-disconnected', function(e){
