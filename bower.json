@@ -15,7 +15,7 @@
     "awesomplete": "https://github.com/LeaVerou/awesomplete.git#^1.0.0"
   },
   "devDependencies": {
-    "web-component-tester": "*"
+    "web-component-tester": "^4.0.0"
   },
   "ignore": [],
   "resolutions": {
