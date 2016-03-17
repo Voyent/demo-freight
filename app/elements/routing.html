@@ -10,73 +10,123 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <script src="../bower_components/page/page.js"></script>
 <script>
-  window.addEventListener('WebComponentsReady', function() {
+
+ var webComponentsSupported = (
+  'registerElement' in document &&
+  'import' in document.createElement('link') &&
+  'content' in document.createElement('template'));
+
+  if( webComponentsSupported ){
+    //need to wait until window.app is present
+    function waitForApp(){
+      if( !window.app || !window.app.baseUrl){
+        setTimeout(waitForApp, 10);
+      }
+      else{
+        initializeRouting();
+      }
+    }
+    waitForApp();    
+  }
+  else{
+    window.addEventListener('WebComponentsReady', initializeRouting);
+  }
+
+  function initializeRouting(){
+    console.log('demo initializeRouting()');
+     // Removes end / from app.baseUrl which page.base requires for production
+    if (window.location.port === '') {  // if production
+      page.base(app.baseUrl.replace(/\/$/, ''));
+    }
+
+    // Middleware
+    function scrollToTop(ctx, next) {
+      app.scrollPageToTop();
+      next();
+    }
+
+    function closeDrawer(ctx, next) {
+      app.closeDrawer();
+      next();
+    }
+
+    function setFocus(selected){
+      var title = document.querySelector('section[data-route="' + selected + '"] .page-title');
+      if( title ){
+        title.focus();
+      }
+    }
+
+    // Routes
+    page('*', scrollToTop, closeDrawer, function(ctx, next) {
+      next();
+    });
 
     // We use Page.js for routing. This is a Micro
     // client-side router inspired by the Express router
     // More info: https://visionmedia.github.io/page.js/
     page('/', function () {
-      app.$.demoView.route = 'home';
-      app.scrollPageToTop();
+      app.route = 'home';
+      setFocus(app.route);
     });
 
     page('/users', function () {
-      app.$.demoView.route = 'users';
-      app.scrollPageToTop();
+      app.route = 'users';
+      setFocus(app.route);
     });
 
     page('/locations', function () {
-      app.$.demoView.route = 'locations';
-      app.scrollPageToTop();
+      app.route = 'locations';
+      setFocus(app.route);
     });
 
     page('/cargo', function () {
-      app.$.demoView.route = 'cargo';
-      app.scrollPageToTop();
+      app.route = 'cargo';
+      setFocus(app.route);
     });
 
     page('/regions', function () {
-      app.$.demoView.route = 'regions';
-      app.scrollPageToTop();
+      app.route = 'regions';
+      setFocus(app.route);
     });
 
     page('/notifications', function () {
-      app.$.demoView.route = 'notifications';
+      app.route = 'notifications';
       app.scrollPageToTop();
     });
 
     page('/solicit', function () {
-      app.$.demoView.route = 'solicit';
-      app.scrollPageToTop();
+      app.route = 'solicit';
+      setFocus(app.route);
     });
 
     page('/events', function () {
-      app.$.demoView.route = 'events';
-      app.scrollPageToTop();
+      app.route = 'events';
+      setFocus(app.route);
     });
 
     page('/queries', function () {
-      app.$.demoView.route = 'queries';
-      app.scrollPageToTop();
+      app.route = 'queries';
+      setFocus(app.route);
     });
 
     page('/triggers', function () {
-      app.$.demoView.route = 'triggers';
-      app.scrollPageToTop();
+      app.route = 'triggers';
+      setFocus(app.route);
     });
 
     page('/accel', function () {
-      app.$.demoView.route = 'accel';
-      app.scrollPageToTop();
+      app.route = 'accel';
+      setFocus(app.route);
     });
 
     page('/actions', function () {
-      app.$.demoView.route = 'actions';
-      app.scrollPageToTop();
+      app.route = 'actions';
+      setFocus(app.route);
     });
 
     page('/logs', function () {
-      app.$.demoView.route = 'logs';
+      app.route = 'logs';
       app.scrollPageToTop();
     });
 
@@ -84,5 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     page({
       hashbang: true
     });
-  });
+
+ 
+  }
 </script>
