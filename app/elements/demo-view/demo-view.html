@@ -337,62 +337,62 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <template is="dom-if" if="{{isAdmin}}">
 
-            <a data-route="home" on-click="onHomeRouteClick">
+            <a data-route="home" href="{{baseUrl}}">
               <iron-icon icon="home"></iron-icon>
               <span>Home</span>
             </a>
 
-            <a id="usersLink" data-route="users" on-click="onUsersRouteClick">
+            <a id="usersLink" data-route="users" href="{{baseUrl}}users">
               <span class="demo-step-badge">1</span>
               <span>Users</span>
             </a>
 
-            <a data-route="cargo" on-click="onCargoRouteClick">
+            <a data-route="cargo" href="{{baseUrl}}cargo">
               <span class="demo-step-badge">2</span>
               <span>Cargo</span>
             </a>
 
-            <a data-route="regions" on-click="onRegionsRouteClick">
+            <a data-route="regions" href="{{baseUrl}}regions">
               <span class="demo-step-badge">3</span>
                 <span>Regions</span>
             </a>
 
-            <a data-route="locations" on-click="onLocationsRouteClick">
+            <a data-route="locations" href="{{baseUrl}}locations">
               <span class="demo-step-badge">4</span>
               <span>Locations</span>
             </a>
 
-            <a data-route="triggers" on-click="onTriggersRouteClick">
+            <a data-route="triggers" href="{{baseUrl}}triggers">
               <span class="demo-step-badge">5</span>
               <span>Triggers</span>
             </a>
 
-            <a data-route="actions" on-click="onActionsRouteClick">
+            <a data-route="actions" href="{{baseUrl}}actions">
               <span class="demo-step-badge">6</span>
               <span>Actions</span>
             </a>
 
-            <a data-route="accel" on-click="onAccelRouteClick">
+            <a data-route="accel" href="{{baseUrl}}accel">
               <span class="demo-step-badge">7</span>
               <span>Accelerometer</span>
             </a>
 
-            <a data-route="notifications" on-click="onNotificationsRouteClick">
+            <a data-route="notifications" href="{{baseUrl}}notifications">
               <span class="demo-step-badge">8</span>
               <span>Notifications</span>
             </a>
 
-            <a data-route="events" on-click="onEventsRouteClick">
+            <a data-route="events" href="{{baseUrl}}events">
               <span class="demo-step-badge">9</span>
               <span>Events</span>
             </a>
 
-            <a data-route="logs" on-click="onLogsRouteClick">
+            <a data-route="logs" href="{{baseUrl}}logs">
               <span class="demo-step-badge">10</span>
               <span>Logs</span>
             </a>
 
-            <a data-route="queries" on-click="onQueriesRouteClick">
+            <a data-route="queries" href="{{baseUrl}}queries">
               <span class="demo-step-badge">11</span>
               <span>Queries</span>
             </a>
@@ -401,15 +401,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <template is="dom-if" if="{{isUser}}">
 
-            <a data-route="home" on-click="onHomeRouteClick">
+            <a data-route="home" href="{{baseUrl}}">
               <iron-icon icon="home"></iron-icon>
               <span>Home</span>
             </a>
-            <a data-route="solicit" on-click="onSolicitRouteClick">
+            <a data-route="solicit" href="{{baseUrl}}solicit">
               <span class="demo-step-badge">1</span>
               <span>Messages</span>
             </a>
-            <a data-route="notifications" on-click="onNotificationsRouteClick">
+            <a data-route="notifications" href="{{baseUrl}}notifications">
               <span class="demo-step-badge">2</span>
               <span>Notifications</span>
             </a>
@@ -434,7 +434,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <span class="hidden-phone">Cloud Push</span>
             </paper-button>
           </template>
-          <paper-button tabindex="0" on-click="onNotificationsRouteClick">
+          <paper-button tabindex="0" href="{{baseUrl}}notifications">
             <iron-icon icon="mail"></iron-icon>
             <paper-badge label="{{notificationCount}}" class="green-badge"></paper-badge>
           </paper-button>
@@ -598,6 +598,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       properties: {
+
+        baseUrl: {
+          type: String,
+          notify: true
+        },
+
+        route: {
+          type: String,
+          notify: true
+        },
+
         isAdmin: {
           notify: true,
           type: Boolean
@@ -668,69 +679,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       handleLogout: function(){
         bridgeit.xio.push.removeListener();
         document.getElementById('authProvider').logout();
-      },
-
-      onDataRouteClick: function(e, route) {
-        console.log('onDataRouteClick(' + route + ')');
-        var drawerPanel = this.$$('#paperDrawerPanel');
-        if (drawerPanel.narrow) {
-          drawerPanel.closeDrawer();
-        }
-        this.route = route;
-        window.location.hash = '!/' + route;
-        e.preventDefault();
-      },
-
-      onHomeRouteClick: function(e){
-        this.onDataRouteClick(e, 'home');
-      },
-
-      onEventsRouteClick: function(e){
-        this.onDataRouteClick(e, 'events');
-      },
-
-      onNotificationsRouteClick: function(e){
-        this.onDataRouteClick(e, 'notifications');
-      },
-
-      onSolicitRouteClick: function(e){
-        this.onDataRouteClick(e, 'solicit');
-      },
-
-      onUsersRouteClick: function(e){
-        this.onDataRouteClick(e, 'users');
-      },
-
-      onRegionsRouteClick: function(e){
-        this.onDataRouteClick(e, 'regions');
-      },
-
-      onQueriesRouteClick: function(e){
-        this.onDataRouteClick(e, 'queries');
-      },
-
-      onTriggersRouteClick: function(e){
-        this.onDataRouteClick(e, 'triggers');
-      },
-
-      onActionsRouteClick: function(e){
-        this.onDataRouteClick(e, 'actions');
-      },
-
-      onLocationsRouteClick: function(e){
-        this.onDataRouteClick(e, 'locations');
-      },
-
-      onAccelRouteClick: function(e){
-        this.onDataRouteClick(e, 'accel');
-      },
-
-      onCargoRouteClick: function(e){
-        this.onDataRouteClick(e, 'cargo');
-      },
-
-      onLogsRouteClick: function(e){
-        this.onDataRouteClick(e, 'logs');
       },
 
       isEqual: function(arg1, arg2){

@@ -11,6 +11,7 @@
   'use strict';
 
   function finishLazyLoading(){
+    console.log('demo finishLazyLoading()');
     // Grab a reference to our auto-binding template
     // and give it some initial binding values
     // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
@@ -19,6 +20,14 @@
 
     //set default host;
     app.host = 'dev.bridgeit.io';
+
+    // Sets app default base URL
+    app.baseUrl = '/';
+    if (window.location.port === '') {  // if production
+      // Uncomment app.baseURL below and
+      // set app.baseURL to '/your-pathname/' if running from folder in production
+      app.baseUrl = '/freight/';
+    }
 
     app.displayInstalledToast = function() {
       // Check to make sure caching is actually enabled—it won't be in the dev environment.
@@ -152,6 +161,7 @@
     // See https://github.com/Polymer/polymer/issues/1381
     window.addEventListener('WebComponentsReady', function() {
       // imports are loaded and elements have been registered
+      console.log('WebComponentsReady!!!');
     });
 
     window.addEventListener('bridgeit-access-token-refreshed', function(e){
@@ -206,6 +216,10 @@
     // Scroll page to top and expand header
     app.scrollPageToTop = function() {
       document.getElementById('mainContainer').scrollTop = 0;
+    };
+
+    app.closeDrawer = function() {
+      document.getElementById('paperDrawerPanel').closeDrawer();
     };
   }
 
