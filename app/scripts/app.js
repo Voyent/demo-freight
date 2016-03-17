@@ -26,7 +26,7 @@
     if (window.location.port === '') {  // if production
       // Uncomment app.baseURL below and
       // set app.baseURL to '/your-pathname/' if running from folder in production
-      app.baseUrl = '/freight/';
+      app.baseUrl = '/demos/freight/';
     }
 
     app.displayInstalledToast = function() {
@@ -219,7 +219,10 @@
     };
 
     app.closeDrawer = function() {
-      document.getElementById('paperDrawerPanel').closeDrawer();
+      var drawerPanel = document.getElementById('paperDrawerPanel');
+      if( drawerPanel ){
+        drawerPanel.closeDrawer();
+      }
     };
   }
 
