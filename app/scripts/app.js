@@ -43,7 +43,9 @@
           return o;
         }
       }
-      catch (e) { }
+      catch (e) { 
+        console.log('error parsing json', e);
+      }
 
       return false;
     }
