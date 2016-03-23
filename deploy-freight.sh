@@ -50,6 +50,6 @@ echo "...Copying Dist to server..."
 scp -i ~/.ssh/ICEsoft_Linux_Test_Key_Pair.pem freight.tar.gz ubuntu@web1d:~/. || { exit 1; }
 
 echo "...Unpacking Dist on server to $DESTDIR..."
-#ssh -i ~/.ssh/ICEsoft_Linux_Test_Key_Pair.pem ubuntu@web1d "sudo tar -zxf /home/ubuntu/freight.tar.gz -C $DESTDIR"
+ssh -i ~/.ssh/ICEsoft_Linux_Test_Key_Pair.pem ubuntu@web1d "sudo tar -zxf /home/ubuntu/freight.tar.gz -C $DESTDIR"
 echo "...Cleaning up local compressed file..."
 rm freight.tar.gz
