@@ -391,9 +391,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <span class="demo-step-badge">10</span>
               <span>Logs</span>
             </a>
+            
+            <a data-route="backpack" href="{{baseUrl}}backpack">
+              <span class="demo-step-badge">11</span>
+              <span>Backpack</span>
+            </a>
 
             <a data-route="queries" href="{{baseUrl}}queries">
-              <span class="demo-step-badge">11</span>
+              <span class="demo-step-badge">12</span>
               <span>Queries</span>
             </a>
 
@@ -514,6 +519,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               <section data-route="logs">
                 <logs-view visible="{{isEqual('logs', route)}}"></logs-view>
+              </section>
+              
+              <section data-route="backpack">
+                <backpack-view visible="{{isEqual('backpack', route)}}"></backpack-view>
               </section>
 
             </template>
