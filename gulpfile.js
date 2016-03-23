@@ -214,7 +214,7 @@ gulp.task('clean', function() {
 });
 
 // Watch files for changes & reload
-gulp.task('serve', ['styles'], function() {
+gulp.task('serve', ['lint', 'styles'], function() {
   browserSync({
     port: 5000,
     notify: false,
@@ -239,7 +239,7 @@ gulp.task('serve', ['styles'], function() {
 
   gulp.watch(['app/**/*.html', '!app/bower_components/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
-  gulp.watch(['app/scripts/**/*.js'], reload);
+  gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint', reload]);
   gulp.watch(['app/images/**/*'], reload);
 });
 
@@ -271,7 +271,7 @@ gulp.task('default', ['clean'], function(cb) {
   // Uncomment 'cache-config' if you are going to use service workers.
   runSequence(
     ['ensureFiles', 'copy', 'styles'],
-    ['images', 'fonts', 'html'],
+    ['lint', 'images', 'fonts', 'html'],
     'vulcanize', // 'cache-config',
     cb);
 });
@@ -295,6 +295,22 @@ gulp.task('deploy-gh-pages', function() {
       branch: 'gh-pages'
     }), $.ghPages()));
 });
+
+// Lint JavaScript
+ gulp.task('lint', function() {
+   return gulp.src([
+       'app/scripts/**/*.js',
+       'app/elements/**/*.html',
+       'gulpfile.js'
+     ])
+     .pipe(reload({
+       stream: true,
+       once: true
+     }))
+     .pipe($.eslint())
+     .pipe($.eslint.format())
+     .pipe($.eslint.failAfterError());
+ });
 
 // Load tasks for web-component-tester
 // Adds tasks for `gulp test:local` and `gulp test:remote`
