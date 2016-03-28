@@ -9,29 +9,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../styles/shared-styles.html">
 
-<dom-module id="demo-data">
+<dom-module id="backpack-view">
+  <template>
+    <h2 class="page-title">Backpack Logs</h2>
+    <template is="dom-if" if="{{visible}}">
+	  <bridgeit-backpack-log id="backpackLog">
+	  </bridgeit-backpack-log>
+    </template>
+  </template>
   <script>
   (function() {
     'use strict';
 
     Polymer({
-      is: 'demo-data',
+      is: 'backpack-view',
 
       properties: {
-        users: {type: Array, notify: true},
-        notificationsByUser: {type: Object, notify: true, value: function(){ return {}; }},
-        notifications: {type: Array, value: [], notify: true},
-        lastNotificationTimestamp: {type: Date, notify: true},
-        notificationCount: { type: Number, notify: true, reflectToAttribute: true, computed: '_computeNotificationCount(notifications.splices)'}
-      },
-
-      _computeNotificationCount: function(notifications){
-        var res = this.notifications ? this.notifications.length : 0;
-        console.log('_computeNotificationCount(' + notifications + ') = ' + res);
-        return res;
+        visible: {
+          type: Boolean,
+          notify: true
+        }
       }
-
     });
   })();
   </script>

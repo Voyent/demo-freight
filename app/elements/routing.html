@@ -11,21 +11,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script src="../bower_components/page/page.js"></script>
 <script>
 
- var webComponentsSupported = (
+var webComponentsSupported = (
   'registerElement' in document &&
   'import' in document.createElement('link') &&
   'content' in document.createElement('template'));
 
+function waitForApp(){
+  if( !window.app || !window.app.baseUrl){
+    setTimeout(waitForApp, 10);
+  }
+  else{
+    initializeRouting();
+  }
+}
+
   if( webComponentsSupported ){
     //need to wait until window.app is present
-    function waitForApp(){
-      if( !window.app || !window.app.baseUrl){
-        setTimeout(waitForApp, 10);
-      }
-      else{
-        initializeRouting();
-      }
-    }
+    
     waitForApp();    
   }
   else{
@@ -127,6 +129,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     page('/logs', function () {
       app.route = 'logs';
+      app.scrollPageToTop();
+    });
+
+    page('/backpack', function () {
+      app.route = 'backpack';
       app.scrollPageToTop();
     });
 
