@@ -119,15 +119,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <br/>
     <h2 class="page-title"><span>{{notificationCount}}</span>&nbsp;Past Messages:</h2>
 
-
-    <template is="dom-if" if="{{!groupByUser}}">
-      <template is="dom-if" if="{{!hasNotifications}}">
-        <paper-material>No notifications yet...</paper-material>
+      <template is="dom-if" if="{{!hasMessages}}">
+        <paper-material>No responses yet...</paper-material>
       </template>
-      <template is="dom-if" if="{{hasNotifications}}">
+      <template is="dom-if" if="{{hasMessages}}">
         <paper-material>
           <paper-menu class="notifications">
-            <template id="iterator" is="dom-repeat" items="[[notifications]]" sort="sortNotifications">
+            <template id="iterator" is="dom-repeat" items="[[messages]]" sort="sortNotifications">
               <paper-icon-item class="notificationInfo">
                 <iron-icon icon="communication:message" item-icon></iron-icon>
                 <paper-item-body two-line>
@@ -144,32 +142,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </paper-menu>
         </paper-material>
       </template>
-    </template>
-    <template is="dom-if" if="{{groupByUser}}">
-      <template is="dom-repeat" items="{{_decoratedUserNotifications}}">
-        <paper-card>
-          <div class="card-content user-card-header">
-            <iron-icon icon="social:person" item-icon></iron-icon>
-            <span>{{item.username}}</span>
-            <small style="float:right"><span>{{item.notifications.length}}</span> Notifications</small>
-          </div>
-          <div class="card-content message-list">
-            <paper-menu>
-              <template is="dom-repeat" items="{{item.notifications}}" as="msg">
-                <paper-item>
-                  <paper-item-body two-line>
-                    <div>{{msg.message}}</div>
-                    <div secondary>
-                      <span>{{msg.time}}</span>
-                    </div>
-                  </paper-item-body>
-                </paper-item>
-              </template>
-            </paper-menu>
-          </div>
-        </paper-card>
-      </template>
-    </template>
+
+
   </template>
   <script>
   (function() {
@@ -187,6 +161,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           observer: '_visibleChanged'
         },
         notifications: { type: Array, notify: true},
+        messages: { type: Array, notify: true, value:[]},
         groupByUser: { type: Boolean, notify: true, value: false},
         users: {
           type: Array,
@@ -203,8 +178,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         lastNotificationTimestamp: {
           type: Number
         },
+        lastMessageTimestamp: {
+          type: Number
+        },
         notificationCount: { type: Number, notify: true},
+        messageCount: { type: Number, notify: true},
         hasNotifications: { type: Boolean, notify: true, computed: '_computeHasNotifications(notifications.splices)'},
+        hasMessages: { type: Boolean, notify: true, computed: '_computeHasMessages(messages.splices)'},
+        queue:{type: Array, notify: true, value:[]}
 
       },
 
@@ -215,33 +196,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _visibleChanged: function () {
         if (poly.visible) {
-          if(poly.hasNotifications && !poly.notifications[poly.notifications.length-1].response){
-            var event = poly.notifications[poly.notifications.length-1];
-            var data = {};
-            data.message = event.message;
-            data.options = event.options;
-            data.event = event.event;
-            var solicit = document.getElementById('solicit');
-            solicit.setAttribute('data',JSON.stringify(data));
-            setTimeout(function(){
-              var headerHeight = solicit.$$('.paper-header.bridgeit-solicit').clientHeight;
-              var buttonHeight = solicit.$$('.selectionButton').clientHeight;
-              var totalHeight = headerHeight + buttonHeight + 15;
-              var solicitDiv = document.getElementById('solicitDiv');
-              if(totalHeight > solicit.clientHeight) {
-                solicitDiv.style.height = totalHeight + 'px';
-              }
-            },100);
-            setTimeout(function(){
-              /* jshint ignore:start*/
-              var buttons = document.getElementsByClassName('selectionButton');
-              for (var i = 0; i < buttons.length; i++){
-                buttons[i].onclick = function(){
-                  poly.updateResponse(this.textContent.trim());
-                };
-              }
-              /* jshint ignore:end*/
-            },200);
+          if(poly.queue.length >= 1){
+            //if(poly.hasNotifications && !poly.notifications[poly.notifications.length-1].response){
+            poly.solicitUpdate();
           }
         }
       },
@@ -269,6 +226,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return this.notifications && this.notifications.length;
       },
 
+      _computeHasMessages: function(messages){
+        console.log('_computeHasMessages(' + messages + ')');
+        return this.messages && this.messages.length;
+      },
+
       getResponse: function(item){
         if(item.response){
           return item.response;
@@ -279,12 +241,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       updateResponse: function(response){
-        var tempNote = poly.notifications;
-        tempNote[poly.notifications.length -1].response = response;
-        poly.set('notifications', []);
+        var tempMess = poly.messages;
+        var message = poly.queue.pop();
+        message.response = response;
+        if(poly.queue.length !== 0){
+          poly.solicitUpdate();
+        }
+        else{
+          document.querySelector('bridgeit-solicit').hideSolicit();
+        }
+        //TODO: Check if this is ordered right, or if it needs to prepend
+        tempMess.push(message);
+        //poly.set('messages', []);
+        poly.push('messages', message);
+      },
+
+      solicitUpdate: function(){
+        var event = poly.queue[0];
+        var data = {};
+        data.message = event.message;
+        data.options = event.options;
+        data.event = event.event;
+        //var solicit = document.getElementById('solicit');
+        var solicit = document.querySelector('bridgeit-solicit');
+
+
+        solicit.setAttribute('data',JSON.stringify(data));
+
         setTimeout(function(){
-          poly.set('notifications',tempNote);
-        },100);
+          var headerHeight = solicit.$$('.paper-header.bridgeit-solicit').clientHeight;
+          var buttonHeight = solicit.$$('.selectionButton').clientHeight;
+          var totalHeight = headerHeight + buttonHeight + 15;
+          var solicitDiv = document.getElementById('solicitDiv');
+          if(totalHeight > solicit.clientHeight) {
+            solicitDiv.style.height = totalHeight + 'px';
+          }
+        },500);
+        setTimeout(function(){
+          /* jshint ignore:start*/
+          var buttons = document.getElementsByClassName('selectionButton');
+          for (var i = 0; i < buttons.length; i++){
+            buttons[i].onclick = function(){
+              poly.updateResponse(this.textContent.trim());
+            };
+          }
+          /* jshint ignore:end*/
+        },600);
       }
 
 

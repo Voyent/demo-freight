@@ -105,31 +105,41 @@
         else{
           console.warn('could not locate demoData element to store user notification');
         }
-        if(window.location.pathname.indexOf('client.html')!== -1 && window.location.hash.indexOf('#!/solicit') !== -1 && payload.options){
+        if(window.location.pathname.indexOf('client.html')!== -1 && payload.options){
             var data = {};
             data.message = payload.message;
             data.options = payload.options;
             data.event = payload.event;
-            var solicit = document.getElementById('solicit');
-            solicit.setAttribute('data',JSON.stringify(data));
-            setTimeout(function(){
-              var headerHeight = solicit.$$('.paper-header.bridgeit-solicit').clientHeight;
-              var buttonHeight = solicit.$$('.selectionButton').clientHeight;
-              var totalHeight = headerHeight + buttonHeight + 15;
-              var solicitDiv = document.getElementById('solicitDiv');
-              if(totalHeight > solicit.clientHeight) {
-                solicitDiv.style.height = totalHeight + 'px';
-              }
-              /* jshint ignore:start*/
-              var buttons = document.getElementsByClassName('selectionButton');
-              for (var i = 0; i < buttons.length; i++){
-                buttons[i].onclick = function(){
-                  document.querySelector('solicit-view').updateResponse(this.textContent.trim());
-                };
-              }
-              /* jshint ignore:end*/
+            console.log('SEEING EVENT, ADDING TO QUEUE');
 
-            },100);
+            document.querySelector('solicit-view').queue.push(data);
+            console.log(document.querySelector('solicit-view').queue);
+            if(window.location.hash.indexOf('#!/solicit') !== -1 && document.querySelector('solicit-view').queue.length === 1) {
+              var solicit = document.getElementById('solicit');
+              solicit.setAttribute('data', JSON.stringify(data));
+              solicit.showSolicit();
+              setTimeout(function () {
+                var headerHeight = solicit.$$('.paper-header.bridgeit-solicit').clientHeight;
+                var buttonHeight = solicit.$$('.selectionButton').clientHeight;
+                var totalHeight = headerHeight + buttonHeight + 15;
+                var solicitDiv = document.getElementById('solicitDiv');
+                if (totalHeight > solicit.clientHeight) {
+                  solicitDiv.style.height = totalHeight + 'px';
+                }
+                /* jshint ignore:start*/
+                var buttons = document.getElementsByClassName('selectionButton');
+                for (var i = 0; i < buttons.length; i++) {
+                  buttons[i].onclick = function () {
+                    document.querySelector('solicit-view').updateResponse(this.textContent.trim());
+                  };
+                }
+                /* jshint ignore:end*/
+
+              }, 100);
+            }
+          else{
+              console.log('Adding to the queue');
+          }
         }
       });
 
