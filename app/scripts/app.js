@@ -43,7 +43,7 @@
           return o;
         }
       }
-      catch (e) { 
+      catch (e) {
         console.log('error parsing json', e);
       }
 
@@ -112,10 +112,8 @@
             data.message = payload.message;
             data.options = payload.options;
             data.event = payload.event;
-            console.log('SEEING EVENT, ADDING TO QUEUE');
 
             document.querySelector('solicit-view').queue.push(data);
-            console.log(document.querySelector('solicit-view').queue);
             if(window.location.hash.indexOf('#!/solicit') !== -1 && document.querySelector('solicit-view').queue.length === 1) {
               var solicit = document.getElementById('solicit');
               solicit.setAttribute('data', JSON.stringify(data));

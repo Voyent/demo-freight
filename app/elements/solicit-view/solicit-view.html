@@ -197,6 +197,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (poly.visible) {
           if(poly.queue.length >= 1){
             //if(poly.hasNotifications && !poly.notifications[poly.notifications.length-1].response){
+            document.querySelector('bridgeit-solicit').showSolicit();
             poly.solicitUpdate();
           }
         }
