@@ -26,7 +26,12 @@
     if (window.location.port === '') {  // if production
       // Uncomment app.baseURL below and
       // set app.baseURL to '/your-pathname/' if running from folder in production
-      app.baseUrl = '/demos/freight/';
+      if(window.location.pathname.indexOf('client.html')!== -1){
+        app.baseUrl = '/demos/freight/client.html/';
+      }
+      else{
+        app.baseUrl = '/demos/freight/';
+      }
     }
 
     app.displayInstalledToast = function() {

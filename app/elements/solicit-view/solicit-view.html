@@ -197,6 +197,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (poly.visible) {
           if(poly.queue.length >= 1){
             //if(poly.hasNotifications && !poly.notifications[poly.notifications.length-1].response){
+            console.log(poly.queue.length);
             document.querySelector('bridgeit-solicit').showSolicit();
             poly.solicitUpdate();
           }
@@ -241,7 +242,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       updateResponse: function(response){
-        var tempMess = poly.messages;
         var message = poly.queue.pop();
         message.response = response;
         if(poly.queue.length !== 0){
@@ -251,8 +251,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           document.querySelector('bridgeit-solicit').hideSolicit();
         }
         //TODO: Check if this is ordered right, or if it needs to prepend
-        tempMess.push(message);
         //poly.set('messages', []);
+        console.log('Adding to messages');
         poly.push('messages', message);
       },
 
