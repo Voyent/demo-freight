@@ -185,7 +185,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         messageCount: { type: Number, notify: true},
         hasNotifications: { type: Boolean, notify: true, computed: '_computeHasNotifications(notifications.splices)'},
         hasMessages: { type: Boolean, notify: true, computed: '_computeHasMessages(messages.splices)'},
-        queue:{type: Array, notify: true, value:[]}
+        queue:{type: Array, notify: true, value:[]},
+        solicitConsumed:{ type: Boolean, notify: true, value: false}
       },
 
 
@@ -195,12 +196,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _visibleChanged: function () {
         if (poly.visible) {
-          if(poly.queue.length >= 1){
-            //if(poly.hasNotifications && !poly.notifications[poly.notifications.length-1].response){
-            console.log(poly.queue.length);
-            document.querySelector('bridgeit-solicit').showSolicit();
-            poly.solicitUpdate();
-          }
+          setTimeout(function() {
+            var solicit = document.querySelector('bridgeit-solicit');
+            if (solicit.getURLParameter('solicit') && !poly.solicitConsumed) {
+              poly.queue.push(solicit.data);
+              poly.solicitConsumed = true;
+            }
+            if (poly.queue.length >= 1) {
+              //if(poly.hasNotifications && !poly.notifications[poly.notifications.length-1].response){
+              document.querySelector('bridgeit-solicit').showSolicit();
+              poly.solicitUpdate();
+            }
+          }, 200);
         }
       },
 
@@ -252,7 +259,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         //TODO: Check if this is ordered right, or if it needs to prepend
         //poly.set('messages', []);
-        console.log('Adding to messages');
         poly.push('messages', message);
       },
 
@@ -268,6 +274,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         solicit.setAttribute('data',JSON.stringify(data));
 
+        poly.setupButtons();
+      },
+
+      setupButtons: function(){
+        var solicit = document.querySelector('bridgeit-solicit');
         setTimeout(function(){
           var headerHeight = solicit.$$('.paper-header.bridgeit-solicit').clientHeight;
           var buttonHeight = solicit.$$('.selectionButton').clientHeight;
