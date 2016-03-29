@@ -107,7 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         z-index: 5;
       }
     </style>
-    <h2 class="page-title">Current Message:</h2>
+    <h2 class="page-title">Current Message (<span>[[messagesRemaining]]</span>&nbsp;Pending):</h2>
     <div class="containerDiv" style="position:relative; display:table;">
       <div id="coverDiv" style="text-align:center; display: table-cell; vertical-align: middle; position:relative; left:0; top:0; width:100%; height:100%; background-color: #fafafa">
         <h3>None</h3>
@@ -117,7 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </div>
     <br/>
-    <h2 class="page-title"><span>{{notificationCount}}</span>&nbsp;Past Messages:</h2>
+    <h2 class="page-title"><span>{{messageCount}}</span>&nbsp;Past Messages:</h2>
 
       <template is="dom-if" if="{{!hasMessages}}">
         <paper-material>No responses yet...</paper-material>
@@ -186,6 +186,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         hasNotifications: { type: Boolean, notify: true, computed: '_computeHasNotifications(notifications.splices)'},
         hasMessages: { type: Boolean, notify: true, computed: '_computeHasMessages(messages.splices)'},
         queue:{type: Array, notify: true, value:[]},
+        messagesRemaining: {type:Number, notify: true, reflect: true, value: 0},
         solicitConsumed:{ type: Boolean, notify: true, value: false}
       },
 
@@ -203,6 +204,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               poly.solicitConsumed = true;
             }
             if (poly.queue.length >= 1) {
+              poly.messagesRemaining = poly.queue.length - 1;
               //if(poly.hasNotifications && !poly.notifications[poly.notifications.length-1].response){
               document.querySelector('bridgeit-solicit').showSolicit();
               poly.solicitUpdate();
@@ -257,6 +259,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         else{
           document.querySelector('bridgeit-solicit').hideSolicit();
         }
+        poly.messagesRemaining = poly.queue.length === 0 ? 0 : poly.queue.length - 1;
         //TODO: Check if this is ordered right, or if it needs to prepend
         //poly.set('messages', []);
         poly.push('messages', message);
