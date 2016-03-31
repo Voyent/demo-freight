@@ -79,7 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <h2 class="page-title"><span>{{notificationCount}}</span>&nbsp;Notifications</h2>
     <paper-toggle-button checked="{{groupByUser}}">Group by User</paper-toggle-button>
-    
+    <div style="position:relative">
     <template is="dom-if" if="{{!groupByUser}}">
       <template is="dom-if" if="{{!hasNotifications}}">
         <paper-material>No notifications yet...</paper-material>
@@ -127,6 +127,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-card>
       </template>
     </template>
+      <paper-button on-click='resetNotifications' style="position:absolute; right:5px; font-size: small; top:5px; padding-top:3px; height:20px; width:40px;">Clear</paper-button>
+    </div>
   </template>
   <script>
   (function() {
@@ -178,6 +180,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _computeHasNotifications: function(notifications){
         console.log('_computeHasNotifications(' + notifications + ')');
         return this.notifications && this.notifications.length;
+      },
+
+      resetNotifications: function(){
+        this.notifications = [];
       }
 
 

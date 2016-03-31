@@ -118,7 +118,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
     <br/>
     <h2 class="page-title"><span>{{messageCount}}</span>&nbsp;Past Messages:</h2>
-
+    <div style="position:relative">
       <template is="dom-if" if="{{!hasMessages}}">
         <paper-material>No responses yet...</paper-material>
       </template>
@@ -142,6 +142,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </paper-menu>
         </paper-material>
       </template>
+      <!--button style="position:absolute; right:5px; top:5px; background-color: red;">Clear</button-->
+      <paper-button on-click='resetMessages' style="position:absolute; right:5px; font-size: small; top:5px; padding-top:3px; height:20px; width:40px;">Clear</paper-button>
+    </div>
 
 
   </template>
@@ -204,7 +207,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               poly.solicitConsumed = true;
             }
             if (poly.queue.length >= 1) {
-              poly.messagesRemaining = poly.queue.length - 1;
+              poly.messagesRemaining = poly.queue.length;
               //if(poly.hasNotifications && !poly.notifications[poly.notifications.length-1].response){
               document.querySelector('bridgeit-solicit').showSolicit();
               poly.solicitUpdate();
@@ -251,15 +254,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       updateResponse: function(response){
-        var message = poly.queue.pop();
+        var message = poly.queue.shift();
         message.response = response;
+
         if(poly.queue.length !== 0){
           poly.solicitUpdate();
         }
         else{
           document.querySelector('bridgeit-solicit').hideSolicit();
         }
-        poly.messagesRemaining = poly.queue.length === 0 ? 0 : poly.queue.length - 1;
+        poly.messagesRemaining = poly.queue.length;
         //TODO: Check if this is ordered right, or if it needs to prepend
         //poly.set('messages', []);
         poly.push('messages', message);
@@ -301,6 +305,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
           /* jshint ignore:end*/
         },600);
+      },
+
+      resetMessages: function(){
+        poly.messages = [];
       }
 
 

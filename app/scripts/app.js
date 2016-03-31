@@ -119,8 +119,7 @@
             data.event = payload.event;
             var solicitView = document.querySelector('solicit-view');
             solicitView.queue.push(data);
-            //solicitView.setAttribute('messagesRemaining', (solicitView.queue.length-1).toString());
-            solicitView.messagesRemaining = solicitView.queue.length-1;
+            solicitView.messagesRemaining = solicitView.queue.length;
             if(window.location.hash.indexOf('#!/solicit') !== -1 && document.querySelector('solicit-view').queue.length === 1) {
               var solicit = document.getElementById('solicit');
               solicit.setAttribute('data', JSON.stringify(data));
