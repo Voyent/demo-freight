@@ -226,6 +226,7 @@
       if (drawerPanel.narrow) {
         drawerPanel.closeDrawer();
       }
+      bridgeit.io.auth.updateLastActiveTimestamp();
     };
 
     // Scroll page to top and expand header
