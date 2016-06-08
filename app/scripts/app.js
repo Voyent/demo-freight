@@ -41,44 +41,14 @@
       }
     };
 
-    function tryParseJSON (jsonString){
-      try {
-        var o = JSON.parse(jsonString);
-        if (o && typeof o === 'object' && o !== null) {
-          return o;
-        }
-      }
-      catch (e) {
-        console.log('error parsing json', e);
-      }
-
-      return false;
-    }
-
     function setupNotificationListener(){
       bridgeit.xio.push.attach('http://'+app.host+'/pushio/demos/realms/' + bridgeit.io.auth.getLastKnownRealm(), bridgeit.io.auth.getLastKnownUsername());
       bridgeit.xio.push.addListener(function (payload) {
         console.log('Notification: ', JSON.stringify(payload));
 
-        //normalize payload TODO!!
-        if(tryParseJSON(payload.message)){
-          payload.message = JSON.parse(payload.message);
-        }
-
-        if( payload.message && typeof payload.message === 'object' && payload.message.message){
-          if(payload.message.options){
-            payload.options = payload.message.options;
-          }
-          if(payload.message.event){
-            payload.event = payload.message.event;
-          }
-
-          payload.message = payload.message.message;
-        }
-
         //ignore first batch of notifications for admin as they are irrelevant
-        payload.usernameFromGroup = payload.group.split('/').pop();
-        if( payload.message === 'joined' && payload.username !== payload.usernameFromGroup ){
+        payload.usernameFromGroup = payload.group;
+        if( payload.message === 'joined' && payload.sender !== payload.usernameFromGroup ){
           console.log('suppressing notification display');
           return;
         }
@@ -88,7 +58,7 @@
           messageToDisplay = payload.usernameFromGroup + ' joined';
         }
         else{
-          messageToDisplay = payload.message;
+          messageToDisplay = payload.details;
         }
 
         var demoView = app.$.demoView;

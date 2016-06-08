@@ -91,7 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-icon-item>
                 <iron-icon icon="communication:message" item-icon></iron-icon>
                 <paper-item-body two-line>
-                  <div><span>{{item.usernameFromGroup}}</span> <span>{{item.message}}</span></div>
+                  <div><span>{{item.usernameFromGroup}}</span> <span>{{item.details}}</span></div>
                   <div secondary>
                     <span>{{item.time}}</span>
                   </div>
@@ -115,7 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <template is="dom-repeat" items="{{item.notifications}}" as="msg">
                 <paper-item>
                   <paper-item-body two-line>
-                    <div>{{msg.message}}</div>
+                    <div>{{msg.details}}</div>
                     <div secondary>
                       <span>{{msg.time}}</span>
                     </div>
