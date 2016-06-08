@@ -391,7 +391,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <span class="demo-step-badge">10</span>
               <span>Logs</span>
             </a>
-            
+
             <a data-route="backpack" href="{{baseUrl}}backpack">
               <span class="demo-step-badge">11</span>
               <span>Backpack</span>
@@ -410,14 +410,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <iron-icon icon="home"></iron-icon>
               <span>Home</span>
             </a>
-            <a data-route="solicit" href="{{baseUrl}}solicit">
-              <span class="demo-step-badge">1</span>
-              <span>Messages</span>
-            </a>
             <a data-route="notifications" href="{{baseUrl}}notifications">
-              <span class="demo-step-badge">2</span>
-              <span>Notifications</span>
-            </a>
+            <span class="demo-step-badge">1</span>
+            <span>Notifications</span>
+          </a>
 
           </template>
 
@@ -512,15 +508,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               <section data-route="notifications">
                 <notifications-view notifications="[[notifications]]" users="[[users]]"
-                  last-notification-timestamp="[[lastNotificationTimestamp]]"
-                  notifications-by-user="[[notificationsByUser]]" notification-count="[[notificationCount]]">
+                  notifications-by-group="[[notificationsByGroup]]" notification-count="[[notificationCount]]">
                 </notifications-view>
               </section>
 
               <section data-route="logs">
                 <logs-view visible="{{isEqual('logs', route)}}"></logs-view>
               </section>
-              
+
               <section data-route="backpack">
                 <backpack-view visible="{{isEqual('backpack', route)}}"></backpack-view>
               </section>
@@ -533,8 +528,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <notifications-view notifications="[[notifications]]"></notifications-view>
               </section>
 
-              <section data-route="solicit">
-                <solicit-view notifications="[[notifications]]" visible="{{isEqual('solicit', route)}}"></solicit-view>
+              <section data-route="notifications-driver">
+                <notifications-driver-view visible="{{isEqual('notifications-driver', route)}}"></notifications-driver-view>
+              </section>
+
+              <section data-route="notifications-inspector">
+                <notifications-inspector-view visible="{{isEqual('notifications-inspector', route)}}"></notifications-inspector-view>
+              </section>
+
+              <section data-route="notifications-adjuster">
+                <notifications-adjuster-view visible="{{isEqual('notifications-adjuster', route)}}"></notifications-adjuster-view>
+              </section>
+
+              <section data-route="notifications-manager">
+                <notifications-manager-view visible="{{isEqual('notifications-manager', route)}}"></notifications-manager-view>
               </section>
 
             </template>
@@ -544,10 +551,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-scroll-header-panel>
       </paper-drawer-panel>
 
-      <paper-toast id="toast">
-        <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">{{message}}</span>
-      </paper-toast>
-
        <paper-toast id="errorToast" duration="20000">
         <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.errorToast.hide()">{{error}}</span>
       </paper-toast>
@@ -556,8 +559,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         notifications="{{notifications}}"
         users="{{users}}"
         scenarios="{{scenarios}}"
-        last-notification-timestamp="{{lastNotificationTimestamp}}"
-        notifications-by-user="{{notificationsByUser}}"
+        notifications-by-group="{{notificationsByGroup}}"
         notification-count="{{notificationCount}}">
       </demo-data>
     </template>

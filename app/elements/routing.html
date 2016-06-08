@@ -40,6 +40,37 @@ function waitForApp(){
     if (window.location.port === '') {  // if production
       page.base(app.baseUrl.replace(/\/$/, ''));
     }
+    /*console.log('***** - Setting page.base to',app.baseUrl);
+    if (app.baseUrl !== '/') {
+      page.base(app.baseUrl);
+    }*/
+
+    // Close drawer after menu item is selected if drawerPanel is narrow
+    app.onDataRouteClick = function() {
+      var drawerPanel = document.getElementById('paperDrawerPanel');
+      if (drawerPanel.narrow) {
+        drawerPanel.closeDrawer();
+      }
+    };
+
+    // Scroll page to top and expand header
+    /*app.scrollPageToTop = function() {
+     document.getElementById('mainContainer').scrollTop = 0;
+     };*/
+    app.scrollPageToTop = function() {
+      var mainContainer = document.getElementById('mainContainer');
+      // if (mainContainer) {
+      if (mainContainer && mainContainer.scrollTop) {
+        mainContainer.scrollTop = 0;
+      }
+    };
+
+    app.closeDrawer = function() {
+      var drawerPanel = document.getElementById('paperDrawerPanel');
+      if( drawerPanel ){
+        drawerPanel.closeDrawer();
+      }
+    };
 
     // Middleware
     function scrollToTop(ctx, next) {
@@ -97,9 +128,24 @@ function waitForApp(){
       app.scrollPageToTop();
     });
 
-    page('/solicit', function () {
-      app.route = 'solicit';
-      setFocus(app.route);
+    page('/notifications-driver', function () {
+      app.route = 'notifications-driver';
+      app.scrollPageToTop();
+    });
+
+    page('/notifications-inspector', function () {
+      app.route = 'notifications-inspector';
+      app.scrollPageToTop();
+    });
+
+    page('/notifications-adjuster', function () {
+      app.route = 'notifications-adjuster';
+      app.scrollPageToTop();
+    });
+
+    page('/notifications-manager', function () {
+      app.route = 'notifications-manager';
+      app.scrollPageToTop();
     });
 
     page('/events', function () {
