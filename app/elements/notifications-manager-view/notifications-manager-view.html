@@ -17,11 +17,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
       }
-
       .notifications paper-item{
         font-size: 12px;
       }
-
       paper-material{
         padding: 20px;
         background-color: #FFF;
@@ -40,28 +38,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-bottom: none;
         padding-bottom: 0;
       }
-
-      .wrapperDiv {
-        height:75px;
-        width: 100%;
-      }
-      paper-header-panel {
-        background-color:white;
-        box-shadow:0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        height:100%;
-        margin:12px;
-        width:100%;
-      }
-      .paper-header {
-        background-color:#5c6f38;
-        color:white;
-        text-align:center;
-        transition:height 0.2s ease 0s;
-      }
-      .content {
-        padding-top:10px;
-        text-align:center;
-      }
       paper-button.clear {
         font-size: small;
         height: 20px;
@@ -71,22 +47,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         top: 5px;
         width: 40px;
       }
+      @media (max-width: 900px) {
+        #parentDiv{
+          font-size: 12px;
+          line-height: 12px;
+        }
+      }
+      @media (max-width: 600px) {
+        #parentDiv{
+          font-size: 10px;
+          line-height: 10px;
+        }
+      }
     </style>
 
-    <h2>Current Message:</h2>
-    <template is="dom-if" if="{{message}}">
-      <div class="wrapperDiv">
-        <paper-header-panel>
-          <div class="paper-header">{{message}}</div>
-          <div class="content">
-            <paper-button raised on-click="fireEvent" data-response="Acknowledge" data-result="ack">Acknowledge</paper-button>
-          </div>
-        </paper-header-panel>
+    <div style="display:flex; justify-content:center;"><h2>Notification Info:</h2></div>
+    <div id="parentDiv" style="display:flex; justify-content:space-between; width:100%; padding:0; overflow:visible !important;">
+      <div style="flex-grow:4;">
+        <br/>
+        <div>
+          Description: <span data-selected-details></span><br/><br/>
+          Sent At: <span data-selected-time></span><br/><br/>
+        </div>
+        <h4>Responses:</h4>
+        <div>
+          <paper-button raised on-click="deleteNotification">Delete</paper-button>
+          <paper-button raised on-click="fireEvent" data-response="Acknowledge" data-result="ack">Acknowledge</paper-button>
+        </div>
       </div>
-    </template>
-    <template is="dom-if" if="{{!message}}">
-      No notification to display.
-    </template>
+    </div>
 
     <h2>Past Messages:</h2>
     <div style="position:relative">
@@ -134,10 +123,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Array,
             value:[]
           },
-          message: {
-            type: String,
-            value:null
-          },
           hasMessages: {
             type: Boolean,
             computed: '_computeHasMessages(messages.splices)'
@@ -145,12 +130,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         loadNotification: function() {
-          if (bridgeit.notify.selected && !this.message) {
-            this.message = bridgeit.notify.selected.details;
+          if (bridgeit.notify.selected) {
+            bridgeit.notify.clearInjectedNotificationData();
+            bridgeit.notify.injectNotificationData();
           }
         },
 
+        deleteNotification:function(){
+          bridgeit.notify.clearInjectedNotificationData();
+          bridgeit.notify.removeSelectedNotification();
+        },
+
         fireEvent: function(e) {
+          if (!bridgeit.notify.selected) {
+            return;
+          }
           var _this = this;
           var event = {
             "service":"freight",
@@ -170,6 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var notification = bridgeit.notify.selected;
             notification.response = e.target.getAttribute('data-response');
             _this.push('messages',notification);
+            bridgeit.notify.clearInjectedNotificationData();
             bridgeit.notify.removeSelectedNotification();
           }).catch(function(error) {
             console.log('Error in createCustomEvent:',error);
