@@ -91,7 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <bridgeit-auth-provider id="authProvider" account="demos" realm="freight"
       host="[[host]]" logged-in="{{isLoggedIn}}" error="{{loginError}}" timeout="120" admin="true"
-      scope-to-path="/demos/freight/">
+      scope-to-path="/demos/staging/freight/">
     </bridgeit-auth-provider>
     <bridgeit-login-paper-card heading="Freight Demo Admin Login" username="{{username}}" password="{{password}}" error="{{loginError}}"
       auth-provider="authProvider" submit-label="Login" cancel-label="Cancel" hidden="{{isLoggedIn}}" login-as-admin="true"
@@ -137,8 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }, 5000);
 
       }).catch( function(error){
-        console.log('error loading users for users-view: ' + error);
-        document.querySelector('#app').fire('bridgeit-error', {error: Error('Could not fetch users list: ' + error.responseText)});
+        console.error('Error loading users for users-view: ' + error.toSource());
       });
     };
   </script>

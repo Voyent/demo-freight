@@ -27,10 +27,10 @@
       // Uncomment app.baseURL below and
       // set app.baseURL to '/your-pathname/' if running from folder in production
       if(window.location.pathname.indexOf('client.html')!== -1){
-        app.baseUrl = '/demos/freight/client.html/';
+        app.baseUrl = '/demos/staging/freight/client.html/';
       }
       else{
-        app.baseUrl = '/demos/freight/';
+        app.baseUrl = '/demos/staging/freight/';
       }
     }
 
