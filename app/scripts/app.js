@@ -68,7 +68,7 @@
         }
       }
     });
-    document.addEventListener('notificationSelected',function(e) {
+    document.addEventListener('notificationChanged',function(e) {
       function waitForDemoView() {
         if (!window.app || !app.$ || !app.$.demoView) {
           setTimeout(waitForDemoView, 100);
@@ -76,7 +76,7 @@
         }
         //when the current notification is set we want to
         //load the notification if we are on the page
-        if (!e.detail.notification || !e.detail.notification) {
+        if (!e.detail.notification || !e.detail.notification.payload) {
           return;
         }
         var route = e.detail.notification.payload.route;
