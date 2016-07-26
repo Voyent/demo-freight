@@ -52,12 +52,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles">
-    bridgeit-login-paper-card{
+    voyent-login-paper-card{
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
       padding-top: 40px;
---bridgeit-login-image:{
+--voyent-login-image:{
         width:100%;
         max-width: 600px;
         max-height:300px;
@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     @media (max-width: 600px) {
-      bridgeit-login-paper-card{
+      voyent-login-paper-card{
         padding-top: 0;
       }
     }
@@ -93,11 +93,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Main Content -->
   <div id="mainContainer">
 
-    <bridgeit-auth-provider id="authProvider" account="demos" realm="freight"
+    <voyent-auth-provider id="authProvider" account="demos" realm="freight"
       host="[[host]]" logged-in="{{isLoggedIn}}" error="{{loginError}}" timeout="120"
       scope-to-path="/demos/freight/">
-    </bridgeit-auth-provider>
-    <bridgeit-login-paper-card  heading="Freight Demo Client Sign In" username="{{username}}" password="{{password}}" error="{{loginError}}"
+    </voyent-auth-provider>
+    <voyent-login-paper-card  heading="Freight Demo Client Sign In" username="{{username}}" password="{{password}}" error="{{loginError}}"
       auth-provider="authProvider" submit-label="Login" cancel-label="Cancel" hidden="{{isLoggedIn}}"
       header-image="images/highway.jpg" showrealminput realm="freight">
       <paper-input id="host" required label="Host" placeholder="Enter the Host" value="{{host}}">
@@ -105,7 +105,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         onclick="document.querySelector('#host').value = '';" tabindex="-1">
       </paper-icon-button>
       </paper-input>
-    </bridgeit-login-paper-card>
+    </voyent-login-paper-card>
     <demo-view id="demoView" visible="{{isLoggedIn}}" username="[[username]]" host="[[host]]"
       base-url="[[baseUrl]]" route="{{route}}"></demo-view>
   </div>
@@ -134,7 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     window.initializePushGroups = function(){
-      bridgeit.xio.push.join("/demos/realms/" + bridgeit.io.auth.getLastKnownRealm() + "/" + bridgeit.io.auth.getLastKnownUsername());
+      voyent.xio.push.join("/demos/realms/" + voyent.io.auth.getLastKnownRealm() + "/" + voyent.io.auth.getLastKnownUsername());
     };
 
   </script>

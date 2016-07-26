@@ -42,7 +42,7 @@
     };
 
     function setupNotificationListener() {
-      bridgeit.xio.push.attach('http://'+app.host+'/pushio/demos/realms/' + bridgeit.io.auth.getLastKnownRealm(), bridgeit.io.auth.getLastKnownUsername());
+      voyent.xio.push.attach('http://'+app.host+'/pushio/demos/realms/' + voyent.io.auth.getLastKnownRealm(), voyent.io.auth.getLastKnownUsername());
       window.initializePushGroups(); //delegates to index.html for admins or client.html for regular users
     }
 
@@ -52,11 +52,11 @@
       //are only acted on by regular users
       if (app.$.demoView.isAdmin) {
         e.preventDefault();
-        bridgeit.notify.hideNotification(e.detail.toast ? e.detail.toast : e.detail.native,0);
+        voyent.notify.hideNotification(e.detail.toast ? e.detail.toast : e.detail.native,0);
         return;
       }
       //set the current notification
-      bridgeit.notify.selectNotification(notification);
+      voyent.notify.selectNotification(notification);
       var route = notification.payload.route;
       if (route) {
         if (route === app.route) {
@@ -97,7 +97,7 @@
         var demoData = app.$.demoView.$$('demo-data');
         if (demoData) {
           //sync the notification count
-          demoData.set('notificationCount', bridgeit.notify.getNotificationCount());
+          demoData.set('notificationCount', voyent.notify.getNotificationCount());
           //sync the notification queue
           demoData.set('notifications', e.detail.queue);
           //convert the queue array to an user map object so we can group by users on the notification page
@@ -120,7 +120,7 @@
     // have resolved and content has been stamped to the page
     app.addEventListener('dom-change', function() {
       console.log('Initializing demo');
-      if( bridgeit.io.auth.isLoggedIn()){
+      if( voyent.io.auth.isLoggedIn()){
         setTimeout(function(){
           setupNotificationListener();
           //initialize lastNotificationTimestamp so user list displays
@@ -144,19 +144,19 @@
       console.log('WebComponentsReady!!!');
     });
 
-    window.addEventListener('bridgeit-access-token-refreshed', function(e){
-      console.log('demo app received event bridgeit-access-token-refreshed', e);
-      bridgeit.xio.push.refreshConnection();
+    window.addEventListener('voyent-access-token-refreshed', function(e){
+      console.log('demo app received event voyent-access-token-refreshed', e);
+      voyent.xio.push.refreshConnection();
     });
 
-    window.addEventListener('bridgeit-session-expired', function(e){
-      console.log('demo app received event bridgeit-session-expired', e);
-      bridgeit.xio.push.disconnect();
+    window.addEventListener('voyent-session-expired', function(e){
+      console.log('demo app received event voyent-session-expired', e);
+      voyent.xio.push.disconnect();
     });
 
-    window.addEventListener('bridgeit-session-disconnected', function(e){
-      console.log('demo app received event bridgeit-session-disconnected', e);
-      bridgeit.xio.push.disconnect();
+    window.addEventListener('voyent-session-disconnected', function(e){
+      console.log('demo app received event voyent-session-disconnected', e);
+      voyent.xio.push.disconnect();
     });
 
     // Main area's paper-scroll-header-panel custom condensing transformation of

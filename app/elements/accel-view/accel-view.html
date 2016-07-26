@@ -176,7 +176,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             loadScenarios: function () {
                 var params = {collection:'accelerometer-simulations'};
-                bridgeit.io.documents.findDocuments(params).then(function (documents) {
+                voyent.io.documents.findDocuments(params).then(function (documents) {
                   poly.scenarios = documents;
                 });
             },
@@ -200,7 +200,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 'data': {'id': scenario}
               }
             };
-            bridgeit.io.metrics.createCustomEvent(params);
+            voyent.io.metrics.createCustomEvent(params);
           },
 
           playData:function(e){
@@ -212,13 +212,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               if(item.className.indexOf('deadDevice') !== -1){
                 item.classList.add('liveDevice');
                 item.classList.remove('deadDevice');
-                bridgeit.io.device.startDevice({'macAddress':macAddress});
+                voyent.io.device.startDevice({'macAddress':macAddress});
                 item.querySelector('.deviceButton').textContent = 'Stop';
               }
               else {
                 item.classList.add('deadDevice');
                 item.classList.remove('liveDevice');
-                bridgeit.io.device.stopDevice({'macAddress':macAddress});
+                voyent.io.device.stopDevice({'macAddress':macAddress});
                 item.querySelector('.deviceButton').textContent = 'Start';
               }
 
@@ -227,7 +227,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           checkLiveDevices:function(){
 
-            bridgeit.io.device.getRunningDevices({}).then(function (devices) {
+            voyent.io.device.getRunningDevices({}).then(function (devices) {
               for(var i = 0; i < poly.devices.length; i++){
                 var currentDevice = poly.$$('#a'+poly.devices[i]);
                 if(devices.running.indexOf(poly.devices[i]) === -1){

@@ -1,4 +1,4 @@
-## BridgeIt Freight Demo
+## Voyent Freight Demo
 
 > A demo with big trucks.
 

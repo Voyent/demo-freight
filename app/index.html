@@ -51,10 +51,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
   <script src="bower_components/ace-builds/src-min-noconflict/mode-javascript.js"></script>
   <link type="text/css" rel="stylesheet" href="bower_components/jQuery-QueryBuilder/dist/css/query-builder.default.min.css">
-  <link type="text/css" rel="stylesheet" href="bower_components/bridgeit-web-components/bridgeit-query-editor/bridgeit-query-editor.min.css">
+  <link type="text/css" rel="stylesheet" href="bower_components/voyent-web-components/voyent-query-editor/voyent-query-editor.min.css">
   <link type="text/css" rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">
-  <link type="text/css" rel="stylesheet" href="bower_components/bridgeit-web-components/bridgeit-event-monitor/bridgeit-event-monitor.css">
-  <link type="text/css" rel="stylesheet" href="bower_components/bridgeit-web-components/bridgeit-event-monitor/bridgeit-event-monitor-repeat.css">
+  <link type="text/css" rel="stylesheet" href="bower_components/voyent-web-components/voyent-event-monitor/voyent-event-monitor.css">
+  <link type="text/css" rel="stylesheet" href="bower_components/voyent-web-components/voyent-event-monitor/voyent-event-monitor-repeat.css">
 
   <!-- will be replaced with elements/elements.vulcanized.html -->
   <link rel="import" href="elements/elements.html">
@@ -62,12 +62,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles">
-    bridgeit-login-paper-card{
+    voyent-login-paper-card{
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
       padding-top: 40px;
-	--bridgeit-login-image:{
+	--voyent-login-image:{
         width:100%;
         max-width: 600px;
         max-height:300px;
@@ -77,7 +77,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     @media (max-width: 600px) {
-      bridgeit-login-paper-card{
+      voyent-login-paper-card{
         padding-top: 0;
       }
     }
@@ -94,11 +94,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Main Content -->
   <div id="mainContainer">
 
-    <bridgeit-auth-provider id="authProvider" account="demos" realm="freight"
+    <voyent-auth-provider id="authProvider" account="demos" realm="freight"
       host="[[host]]" logged-in="{{isLoggedIn}}" error="{{loginError}}" timeout="120" admin="true"
       scope-to-path="/demos/staging/freight/">
-    </bridgeit-auth-provider>
-    <bridgeit-login-paper-card heading="Freight Demo Admin Login" username="{{username}}" password="{{password}}" error="{{loginError}}"
+    </voyent-auth-provider>
+    <voyent-login-paper-card heading="Freight Demo Admin Login" username="{{username}}" password="{{password}}" error="{{loginError}}"
       auth-provider="authProvider" submit-label="Login" cancel-label="Cancel" hidden="{{isLoggedIn}}" login-as-admin="true"
       header-image="images/highway.jpg" showrealminput realm="freight">
       <paper-input id="host" required label="Host" placeholder="Enter the Host" value="{{host}}">
@@ -106,7 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           onclick="document.querySelector('#host').value = '';" tabindex="-1">
         </paper-icon-button>
       </paper-input>
-    </bridgeit-login-paper-card>
+    </voyent-login-paper-card>
     <demo-view id="demoView" visible="[[isLoggedIn]]" is-admin="true" username="[[username]]" host="[[host]]"
       base-url="[[baseUrl]]" route="{{route}}"></demo-view>
   </div>
@@ -133,10 +133,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     window.initializePushGroups = function(){
-      bridgeit.io.admin.getRealmUsers().then( function(users){
+      voyent.io.admin.getRealmUsers().then( function(users){
         setTimeout(function(){
           users.forEach(function(user){
-            bridgeit.xio.push.join(user.username);
+            voyent.xio.push.join(user.username);
           });
           demoView.$$('demo-data').users = users;
         }, 5000);

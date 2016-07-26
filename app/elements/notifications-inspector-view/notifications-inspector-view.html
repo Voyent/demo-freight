@@ -131,19 +131,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         loadNotification: function() {
-          if (bridgeit.notify.selected) {
-            bridgeit.notify.clearInjectedNotificationData();
-            bridgeit.notify.injectNotificationData();
+          if (voyent.notify.selected) {
+            voyent.notify.clearInjectedNotificationData();
+            voyent.notify.injectNotificationData();
           }
         },
 
         deleteNotification:function(){
-          bridgeit.notify.clearInjectedNotificationData();
-          bridgeit.notify.removeSelectedNotification();
+          voyent.notify.clearInjectedNotificationData();
+          voyent.notify.removeSelectedNotification();
         },
 
         fireEvent: function(e) {
-          if (!bridgeit.notify.selected) {
+          if (!voyent.notify.selected) {
             return;
           }
           var _this = this;
@@ -154,19 +154,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             "data":{
               "result":e.target.getAttribute('data-result'),
               "pass":{
-                "stateId":bridgeit.notify.selected.payload.stateId
+                "stateId":voyent.notify.selected.payload.stateId
               }
             }
           };
 
-          bridgeit.io.metrics.createCustomEvent({"event":event}).then(function() {
+          voyent.io.metrics.createCustomEvent({"event":event}).then(function() {
             //remove notification from queue
             _this.message = '';
-            var notification = bridgeit.notify.selected;
+            var notification = voyent.notify.selected;
             notification.response = e.target.getAttribute('data-response');
             _this.push('messages',notification);
-            bridgeit.notify.clearInjectedNotificationData();
-            bridgeit.notify.removeSelectedNotification();
+            voyent.notify.clearInjectedNotificationData();
+            voyent.notify.removeSelectedNotification();
           }).catch(function(error) {
             console.log('Error in createCustomEvent:',error);
           });

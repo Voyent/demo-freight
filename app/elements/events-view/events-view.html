@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../styles/shared-styles.html">
-<link rel="import" href="../bridgeit-message/bridgeit-message.html">
+<link rel="import" href="../voyent-message/voyent-message.html">
 
 <dom-module id="events-view">
   <template>
@@ -47,11 +47,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <h2 class="page-title">Events</h2>
 
-  <bridgeit-query-editor id="queryEditor"
+  <voyent-query-editor id="queryEditor"
                          queryurltarget="queryURL"
                          options='{"limit":100,"sort":{"time":-1}}'
                          service="metrics" collection="events">
-  </bridgeit-query-editor>
+  </voyent-query-editor>
 
   <div class="buttons">
       <button id="resetEditor" onclick="document.getElementById('queryEditor').resetEditor();">New/Reset</button>
@@ -67,31 +67,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <label for="multiIn">Multiple Event Monitors:</label>
       <input id="multiIn" type="checkbox" checked="checked"></input>
       
-      <bridgeit-message></bridgeit-message>
+      <voyent-message></voyent-message>
   </div>
   <br/>
   <div>
       <label>Saved Queries:</label>
-      <bridgeit-query-list id="queryList" for="queryEditor">
-      </bridgeit-query-list>
+      <voyent-query-list id="queryList" for="queryEditor">
+      </voyent-query-list>
   </div>
   <br/>
 
     <div id="eventMonitorMulti">
-        <bridgeit-event-monitor-repeat id="eventMonitorRepeat">
-        </bridgeit-event-monitor-repeat>
+        <voyent-event-monitor-repeat id="eventMonitorRepeat">
+        </voyent-event-monitor-repeat>
     </div>
     
     <div id="eventMonitorSingle" style="display: none;">
-        <bridgeit-event-monitor id="eventMonitor">
-        </bridgeit-event-monitor>
+        <voyent-event-monitor id="eventMonitor">
+        </voyent-event-monitor>
     </div>
     
     <br/><br/>
     
     <div>
         <label>Query Results (Most Recent):
-            <bridgeit-query-results id="queryResults" for="queryEditor" utc="false"></bridgeit-query-results>
+            <voyent-query-results id="queryResults" for="queryEditor" utc="false"></voyent-query-results>
         </label>
     </div>
 
@@ -157,7 +157,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         }
                         
                         // Call our metrics service with our params
-                        bridgeit.io.metrics.findEvents(params).then(successCallback).catch(function(error){
+                        voyent.io.metrics.findEvents(params).then(successCallback).catch(function(error){
                             console.log('findEvents caught an error:', error);
                         });
                     });

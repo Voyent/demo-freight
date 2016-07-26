@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../styles/shared-styles.html">
-<link rel="import" href="../bridgeit-message/bridgeit-message.html">
+<link rel="import" href="../voyent-message/voyent-message.html">
 
 <dom-module id="locations-view">
   <template>
@@ -18,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
       }
-      bridgeit-location-simulator {
+      voyent-location-simulator {
         --location-sim-map: {
           margin-bottom:0;
           margin-top:-20px;
@@ -47,7 +47,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           color: #027244;
         };
       }
-      bridgeit-location-route {
+      voyent-location-route {
         --location-route-wrapper: {
           padding: 20px;
         };
@@ -90,7 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           color: graytext;
         };
       }
-      bridgeit-location-simulations {
+      voyent-location-simulations {
         --location-simulations-wrapper: {
           padding:10px 0 10px 0;
         };
@@ -108,12 +108,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <h2 class="page-title">Locations</h2>
     <template is="dom-if" if="{{visible}}">
-      <bridgeit-message></bridgeit-message>
+      <voyent-message></voyent-message>
     
-      <bridgeit-location-simulator id="locationSimulator">
-        <bridgeit-location-simulations></bridgeit-location-simulations>
-        <bridgeit-location-route></bridgeit-location-route>
-      </bridgeit-location-simulator>
+      <voyent-location-simulator id="locationSimulator">
+        <voyent-location-simulations></voyent-location-simulations>
+        <voyent-location-route></voyent-location-route>
+      </voyent-location-simulator>
     </template>
   </template>
   <script>

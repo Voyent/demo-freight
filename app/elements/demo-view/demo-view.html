@@ -591,10 +591,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         //check cloud push status
-        this.cloudPushRegistered = this.cloudPushSelected = bridgeit.xio.push.cloudPushRegistered();
+        this.cloudPushRegistered = this.cloudPushSelected = voyent.xio.push.cloudPushRegistered();
 
         //mobile
-        this.cloudPushCompatible = bridgeit.isIOS() || bridgeit.isAndroid();
+        this.cloudPushCompatible = voyent.isIOS() || voyent.isAndroid();
       },
 
       properties: {
@@ -671,7 +671,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       handleLogout: function(){
-        bridgeit.xio.push.removeListener();
+        voyent.xio.push.removeListener();
         document.getElementById('authProvider').logout();
         location.reload();
       },
@@ -681,12 +681,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       handleRegisterCloudPush: function(){
-        if( !bridgeit.isIOS() && !bridgeit.isAndroid() ){
+        if( !voyent.isIOS() && !voyent.isAndroid() ){
           window.alert('could not register for cloud push as supported mobile platform not detected');
           return;
         }
         var _this = this;
-        bridgeit.xio.push.registerCloudPush(this.host, 'demos', bridgeit.io.auth.getLastKnownRealm(), bridgeit.io.auth.getLastKnownUsername()).then(function(){
+        voyent.xio.push.registerCloudPush(this.host, 'demos', voyent.io.auth.getLastKnownRealm(), voyent.io.auth.getLastKnownUsername()).then(function(){
           console.log('registered for cloud push promise returned');
           _this.cloudPushRegistered = true;
           _this.message = 'Registered for Cloud Push notifications';
@@ -710,7 +710,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.handleRegisterCloudPush();
           }
           else{
-            bridgeit.xio.push.unregisterCloudPush(this.host, 'demos', bridgeit.io.auth.getLastKnownRealm());
+            voyent.xio.push.unregisterCloudPush(this.host, 'demos', voyent.io.auth.getLastKnownRealm());
             this.cloudPushRegistered = false;
             var _this = this;
             setTimeout(function(){

@@ -146,12 +146,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       }
                     };
 
-                    bridgeit.io.mailbox.updateMailbox({id: username, mailbox: mailbox});
+                    voyent.io.mailbox.updateMailbox({id: username, mailbox: mailbox});
                 }, 10);
             },
 
             loadUsers: function () {
-                bridgeit.io.mailbox.findMailboxes().then(function (users) {
+                voyent.io.mailbox.findMailboxes().then(function (users) {
                     poly.set('users',users);
                     poly.updateToggles();
                 });
@@ -180,7 +180,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             loadRegions: function () {
-                bridgeit.io.location.getAllRegions({}).then(function (locations) {
+                voyent.io.location.getAllRegions({}).then(function (locations) {
                     locations.forEach(function (location) {
                         try {
                             var id = location.label ? location.label : location._id;
