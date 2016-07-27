@@ -19,7 +19,7 @@
 
 
     //set default host;
-    app.host = 'dev.bridgeit.io';
+    app.host = 'dev.voyent.cloud';
 
     // Sets app default base URL
     app.baseUrl = '/';
