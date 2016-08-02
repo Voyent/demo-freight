@@ -10,7 +10,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../styles/shared-styles.html">
-<link rel="import" href="../voyent-message/voyent-message.html">
 
 <dom-module id="locations-view">
   <template>
@@ -109,7 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <h2 class="page-title">Locations</h2>
     <template is="dom-if" if="{{visible}}">
       <voyent-message></voyent-message>
-    
+
       <voyent-location-simulator id="locationSimulator">
         <voyent-location-simulations></voyent-location-simulations>
         <voyent-location-route></voyent-location-route>

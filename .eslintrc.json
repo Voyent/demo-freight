@@ -16,6 +16,6 @@
     "Polymer": false,
     "process": false,
     "require": false,
-    "bridgeit": false
+    "voyent": false
   }
 }
