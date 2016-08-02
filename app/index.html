@@ -96,7 +96,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <voyent-auth-provider id="authProvider" account="demos" realm="freight"
       host="[[host]]" logged-in="{{isLoggedIn}}" error="{{loginError}}" timeout="120" admin="true"
-      scope-to-path="/demos/staging/freight/">
+      scope-to-path="/demos/freight/">
     </voyent-auth-provider>
     <voyent-login-paper-card heading="Freight Demo Admin Login" username="{{username}}" password="{{password}}" error="{{loginError}}"
       auth-provider="authProvider" submit-label="Login" cancel-label="Cancel" hidden="{{isLoggedIn}}" login-as-admin="true"
