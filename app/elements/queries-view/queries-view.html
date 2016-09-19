@@ -102,7 +102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: transparent !important;
       }
     </style>
-    
+
     <br/>
     <paper-tabs selected="{{selectedTab}}" no-bar>
         <paper-tab>Queries</paper-tab>
@@ -123,7 +123,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-dropdown-menu label="Service:" class$="{{getClass(service)}}" style="padding-right:5px;">
                   <iron-selector class="dropdown-content" attr-for-selected="name" selected={{service}}>
                     <div name="location">Location</div>
-                    <div name="mailbox">Mailbox</div>
                     <div name="documents">Document</div>
                     <div name="metrics">Events</div>
                     <div name="authadmin">AuthAdmin</div>
@@ -149,7 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <voyent-query-editor id="queries" service="{{service}}" collection="{{collection}}" currentquery="{{currentquery}}"></voyent-query-editor>
               <voyent-query-results for="queries"></voyent-query-results>
           </div>
-          
+
           <div class="tab-content">
             <h2 class="page-title">Query Chain Editor</h2>
             <voyent-query-chain-editor id="queryChain"></voyent-query-chain-editor>
@@ -170,12 +169,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           service: {
             type: String,
-            value: 'mailbox',
+            value: 'event',
             observer: 'serviceChanged'
           },
           collection: {
             type: String,
-            value: 'mailboxes',
+            value: 'events',
             observer: 'collectionChanged'
           },
           currentquery: {
@@ -194,9 +193,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
           else if (service === 'authadmin') {
             this.collection = 'users';
-          }
-          else if (service === 'mailbox') {
-            this.collection = 'mailboxes';
           }
           else if (service === 'documents') {
             this.collection = '';

@@ -133,7 +133,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <iron-selector class="dropdown-content driverSelect" attr-for-selected="name">
                   <template is="dom-repeat" items="{{users}}">
                     <template is="dom-if" if="{{driverTest(item)}}">
-                      <div name$="[[item._id]]" on-click="updateRelation">[[item._id]]</div>
+                      <div name$="[[item.username]]" on-click="updateRelation">[[item.username]]</div>
                     </template>
                   </template>
                   <div name="none" on-click="updateRelation">No Driver</div>
@@ -205,10 +205,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         loadUsers: function () {
-          voyent.io.mailbox.findMailboxes().then(function (users) {
-            poly.set('users', users);
-            poly.updateInputs();
-          });
+          //make sure we only get the realm users once for the entire app
+          var realmUsers = app.$.demoView.$$('demo-data') ? app.$.demoView.$$('demo-data').users : null;
+          var userProcessedCount = 0;
+          if (!realmUsers) {
+            voyent.io.admin.getRealmUsers().then( function(users){
+              app.$.demoView.$$('demo-data').users = users;
+              realmUsers = users;
+              processUsers();
+            }).catch( function(error){
+              console.error('Error loading realm users in cargo-view:',error);
+            });
+          }
+          else {
+            processUsers();
+          }
+
+          function processUsers() {
+            for (var i=0; i<realmUsers.length; i++) {
+              fetchUserScopeData(realmUsers[i].username);
+            }
+          }
+          function fetchUserScopeData(username) {
+            voyent.io.scope.getUserData({"id":username}).then(function (data) {
+              data.username = username;
+              poly.push('users',data);
+              userProcessedCount++;
+            }).catch(function() {
+              userProcessedCount++;
+            }).then(function() {
+              //make sure we only call updateInputs after we've fetched all the user-scoped data
+              if (userProcessedCount === realmUsers.length) {
+                poly.updateInputs();
+              }
+            });
+          }
         },
 
         updateInputs: function () {
@@ -229,7 +260,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
         driverTest: function (item) {
-          return item.info.role === 'driver';
+          return item.role === 'driver';
         },
         //Current work-around for the fact that html doesn't like names/ids beginning with numbers.
         prependItem: function(item){

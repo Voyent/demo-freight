@@ -58,11 +58,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <h2 class="page-title">Users</h2>
     <template is="dom-if" if="{{visible}}">
         <paper-material>
-            <template is="dom-repeat" items="{{users}}">
-                <paper-icon-item id="[[item._id]]" class="userParent">
+            <template is="dom-repeat" items="{{users}}" sort="sortUsers">
+                <paper-icon-item id="[[item.username]]" class="userParent">
                     <iron-icon icon="account-circle" item-icon class="avatar"></iron-icon>
                     <div class="item-body username">
-                        <div class="flex">{{item._id}}</div>
+                        <div class="flex">{{item.username}}</div>
                     </div>
                     <div class="flex">
                         <paper-dropdown-menu>
@@ -127,7 +127,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             updateUser: function (e) {
                 setTimeout(function () {
-
                     var username = e.srcElement.closest('.userParent').getAttribute('id');
                     var regions = [];
                     var regionEntries = poly.$$('#' + username).querySelector('.regionSelect').querySelectorAll('paper-checkbox');
@@ -136,46 +135,70 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                           regions.push(regionEntries[i].getAttribute('name'));
                         }
                     }
-                    var mailbox = {
-                      info: {
+                    var data = {
                         role: poly.$$('#' + username).querySelector('.roleSelect').querySelector('.iron-selected').getAttribute('name'),
-                        regions: regions
-                      },
-                      state: {
+                        regions: regions,
                         onDuty: poly.$$('#' + username).querySelector('.toggleButton').getAttribute('checked') !== null
-                      }
                     };
 
-                    voyent.io.mailbox.updateMailbox({id: username, mailbox: mailbox});
+                    voyent.io.scope.createUserData({id: username, data: data});
                 }, 10);
             },
 
             loadUsers: function () {
-                voyent.io.mailbox.findMailboxes().then(function (users) {
-                    poly.set('users',users);
-                    poly.updateToggles();
+              //make sure we only get the realm users once for the entire app
+              var realmUsers = app.$.demoView.$$('demo-data') ? app.$.demoView.$$('demo-data').users : null;
+              if (!realmUsers) {
+                voyent.io.admin.getRealmUsers().then( function(users){
+                  app.$.demoView.$$('demo-data').users = users;
+                  realmUsers = users;
+                  processUsers();
+                }).catch( function(error){
+                  console.error('Error loading realm users in users-view:',error);
                 });
+              }
+              else {
+                processUsers();
+              }
+
+              function processUsers() {
+                for (var i=0; i<realmUsers.length; i++) {
+                  fetchUserScopeData(realmUsers[i].username);
+                }
+              }
+              function fetchUserScopeData(username) {
+                voyent.io.scope.getUserData({"id":username}).then(function (data) {
+                  data.username = username;
+                  poly.push('users',data);
+                  poly.updateToggles(data);
+                }).catch(function() {});
+              }
             },
 
-            updateToggles: function () {
+          updateToggles: function (user) {
               function doToggleUpdate(user) {
                 setTimeout(function () {
-                  if (user.state.onDuty) {
-                    poly.$$('#' + user._id).querySelector('.toggleButton').setAttribute('checked', 'checked');
+                  if (user.onDuty) {
+                    poly.$$('#' + user.username).querySelector('.toggleButton').setAttribute('checked', 'checked');
                   }
-                  user.info.regions.forEach(function (region) {
-                    var d = poly.$$('#' + user._id).querySelector('.regionSelect').querySelector('[name="' + region + '"]');
+                  user.regions.forEach(function (region) {
+                    var d = poly.$$('#' + user.username).querySelector('.regionSelect').querySelector('[name="' + region + '"]');
                     if(d !== null) {
                       d.setAttribute('checked', 'checked');
                     }
                   });
 
-                  poly.$$('#' + user._id).querySelector('.roleSelect').setAttribute('selected',user.info.role);
+                  poly.$$('#' + user.username).querySelector('.roleSelect').setAttribute('selected',user.role);
                 },10);
               }
 
-              for (var i=0; i<poly.users.length; i++) {
-                doToggleUpdate(poly.users[i]);
+              if (user) {
+                doToggleUpdate(user);
+              }
+              else {
+                for (var i=0; i<poly.users.length; i++) {
+                  doToggleUpdate(poly.users[i]);
+                }
               }
             },
 
@@ -200,7 +223,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
           driverTest: function(item){
-            return item.info.role === 'driver';
+            return item.role === 'driver';
+          },
+
+          sortUsers: function(a,b) {
+            a = a.username.toLowerCase();
+            b = b.username.toLowerCase();
+            if (a < b) { return -1; }
+            else if (a > b) { return  1; }
+            return 0;
           }
         });
     })();
