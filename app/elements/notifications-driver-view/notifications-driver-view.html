@@ -158,7 +158,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           };
 
-          voyent.io.metrics.createCustomEvent({"event":event}).then(function() {
+          voyent.io.event.createCustomEvent({"event":event}).then(function() {
             //remove notification from queue
             _this.message = '';
             var notification = voyent.notify.selected;

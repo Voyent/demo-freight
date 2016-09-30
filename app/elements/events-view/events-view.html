@@ -49,7 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <voyent-query-editor id="queryEditor"
                          queryurltarget="queryURL"
                          options='{"limit":100,"sort":{"time":-1}}'
-                         service="metrics" collection="events">
+                         service="event" collection="events">
   </voyent-query-editor>
 
   <div class="buttons">
@@ -155,8 +155,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             newEM.lastpoll.setMilliseconds(newEM.lastpoll.getMilliseconds() - newEM.pollinterval);
                         }
 
-                        // Call our metrics service with our params
-                        voyent.io.metrics.findEvents(params).then(successCallback).catch(function(error){
+                        // Call our event service with our params
+                        voyent.io.event.findEvents(params).then(successCallback).catch(function(error){
                             console.log('findEvents caught an error:', error);
                         });
                     });
