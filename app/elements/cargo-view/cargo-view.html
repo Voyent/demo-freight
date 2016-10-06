@@ -200,7 +200,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var relation = {'driver':driver,'cargo':cargo};
 
             var params = {'collection':'accelerometer-relations','id':device,'document':relation};
-            voyent.io.documents.updateDocument(params);
+            voyent.io.docs.updateDocument(params);
           }, 10);
         },
 
@@ -246,7 +246,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           function doInputUpdate(device) {
             setTimeout(function () {
             var params = {'collection':'accelerometer-relations','id':device};
-              voyent.io.documents.getDocument(params).then(function(document){
+              voyent.io.docs.getDocument(params).then(function(document){
                 poly.$$('#a' + document._id).querySelector('.driverSelect').setAttribute('selected',document.driver);
                 poly.$$('#a' + document._id).querySelector('.cargoInput').setAttribute('value',document.cargo);
               });

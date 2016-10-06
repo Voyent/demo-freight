@@ -203,7 +203,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             loadRegions: function () {
-                voyent.io.location.getAllRegions({}).then(function (locations) {
+                voyent.io.locate.getAllRegions({}).then(function (locations) {
                     locations.forEach(function (location) {
                         try {
                             var id = location.label ? location.label : location._id;

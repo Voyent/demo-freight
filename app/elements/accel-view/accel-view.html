@@ -176,7 +176,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             loadScenarios: function () {
                 var params = {collection:'accelerometer-simulations'};
-                voyent.io.documents.findDocuments(params).then(function (documents) {
+                voyent.io.docs.findDocuments(params).then(function (documents) {
                   poly.scenarios = documents;
                 });
             },
