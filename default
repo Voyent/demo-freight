@@ -1,0 +1,15 @@
+# This is a minimum viable configuration for development purposes only.
+# A production quality configuration should be used in public environments.
+
+server {
+    listen 80;
+
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+
+    location /demos/freight {
+        client_max_body_size 0;
+        client_body_buffer_size 1024k;
+    }
+
+}

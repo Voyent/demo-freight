@@ -1,21 +1,11 @@
-# Action Service
+# Voyent Freight Demo
 
-# Because we are using a Node.js image, it assumes we have a valid package.json
-# file included and does some magic for us like installing dependencies and
-# firing up the the start script.
+# This container is based on our Polymer Base image.  It then copies over
+# and builds the app and sets it to be served via Nginx.
 
 # The name:version of the Docker image to use.  Must be the first non-comment.
-FROM node:4.3
+FROM voyent/base-polymer:latest
 
-#Rather than a version, we can provide the name of a LTS (long term support) version.
-#FROM node:argon
-
-#Another option is the risingstack images as they are much smaller Linux
-#resulting in significantly smaller image sizes.
-#FROM risingstack/alpine:3.3-v4.3.0-2.0.0
-#FROM risingstack/alpine:3.3-v4.3.1-3.1.0
-
-# Basically the author of the image.
 MAINTAINER ICEsoft Technologies, Inc.
 
 # Currently, npm default logging for the official Node docker container has
@@ -25,25 +15,46 @@ MAINTAINER ICEsoft Technologies, Inc.
 ENV NPM_CONFIG_LOGLEVEL warn
 
 # Set our working directory.
-RUN mkdir /demo-freight
-WORKDIR /demo-freight
+RUN mkdir /work
+WORKDIR /work
+
+#Gulp gets installed locally under this path during 'npm install'
+ENV PATH $PATH:/work/node_modules/.bin/
 
 COPY package.json ./
 RUN npm install
 
-#Gulp gets installed locally under this path during 'npm install'
-ENV PATH $PATH:/demo-freight/node_modules/.bin/
-
+COPY *.json ./
 COPY .bowerrc ./
+COPY .eslintignore ./
 COPY .jscsrc ./
 COPY .jshintrc ./
-COPY bower.json ./
 COPY gulpfile.js ./
-COPY wct.conf.json ./
 
-RUN npm install -g bower
 RUN bower install
 
 COPY app ./app
 COPY docs ./docs
+COPY tasks ./tasks
+
 RUN gulp
+
+# Remove the Unix-y tools.
+RUN apt-get remove -q -y curl xz-utils git-all
+
+# Copy our custom nginx configurations.
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY default /etc/nginx/conf.d/default.conf
+
+# Copy the contents of the built version of the console so that nginx can serve it.
+# A couple of notes.  After making the directory, we list it.  Seems to be a weird
+# workaround to ensure that the director actually exists before we move stuff into
+# it.  I was getting errors during the "mv" command otherwise.
+RUN ["mkdir", "-p", "/usr/share/nginx/html/demos"]
+RUN ["ls", "-la", "/usr/share/nginx/html/demos"]
+RUN ["mv", "./dist", "/usr/share/nginx/html/demos/freight"]
+
+# Clean up by removing the work directory that has all the build artifacts.
+WORKDIR /
+RUN ["rm", "-Rf", "/work"]
+
