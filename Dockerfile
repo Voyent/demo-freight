@@ -51,7 +51,7 @@ COPY default /etc/nginx/conf.d/default.conf
 # workaround to ensure that the director actually exists before we move stuff into
 # it.  I was getting errors during the "mv" command otherwise.
 RUN ["mkdir", "-p", "/usr/share/nginx/html/demos"]
-RUN ["ls", "-la", "/usr/share/nginx/html/demos"]
+#RUN ["ls", "-la", "/usr/share/nginx/html/demos"]
 RUN ["mv", "./dist", "/usr/share/nginx/html/demos/freight"]
 
 # Clean up by removing the work directory that has all the build artifacts.
