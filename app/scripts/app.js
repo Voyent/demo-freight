@@ -42,7 +42,7 @@
     };
 
     function setupNotificationListener() {
-      voyent.xio.push.attach('http://'+app.host+'/pushio/demos/realms/' + voyent.io.auth.getLastKnownRealm(), voyent.io.auth.getLastKnownUsername());
+      voyent.xio.push.attach(('https:' == document.location.protocol ? 'https://' : 'http://')+app.host+'/pushio/demos/realms/' + voyent.io.auth.getLastKnownRealm(), voyent.io.auth.getLastKnownUsername());
       window.initializePushGroups(); //delegates to index.html for admins or client.html for regular users
     }
 
