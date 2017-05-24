@@ -17,15 +17,6 @@
     // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
     var app = document.querySelector('#app');
 
-
-    // Figure out if we already have a host
-    if (voyent.io.auth.getLastKnownHost()) {
-      app.host = voyent.io.auth.getLastKnownHost();
-    }
-    else {
-      app.host = 'dev.voyent.cloud';
-    }
-
     // Sets app default base URL
     app.baseUrl = '/';
     if (window.location.port === '') {  // if production
@@ -125,6 +116,15 @@
     // have resolved and content has been stamped to the page
     app.addEventListener('dom-change', function() {
       console.log('Initializing demo');
+
+      // Figure out if we already have a host
+      if (voyent.io.auth.getLastKnownHost()) {
+        app.host = voyent.io.auth.getLastKnownHost();
+      }
+      else {
+        app.host = 'dev.voyent.cloud';
+      }
+
       if( voyent.io.auth.isLoggedIn()){
         setTimeout(function(){
           setupNotificationListener();
