@@ -18,8 +18,13 @@
     var app = document.querySelector('#app');
 
 
-    //set default host;
-    app.host = 'dev.voyent.cloud';
+    // Figure out if we already have a host
+    if (voyent.io.auth.getLastKnownHost()) {
+      app.host = voyent.io.auth.getLastKnownHost();
+    }
+    else {
+      app.host = 'dev.voyent.cloud';
+    }
 
     // Sets app default base URL
     app.baseUrl = '/';
