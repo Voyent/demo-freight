@@ -117,13 +117,8 @@
     app.addEventListener('dom-change', function() {
       console.log('Initializing demo');
 
-      // Figure out if we already have a host
-      if (voyent.io.auth.getLastKnownHost()) {
-        app.host = voyent.io.auth.getLastKnownHost();
-      }
-      else {
-        app.host = 'dev.voyent.cloud';
-      }
+      // Determine the host
+      app.host = getDefaultHost();
 
       if( voyent.io.auth.isLoggedIn()){
         setTimeout(function(){
@@ -136,6 +131,24 @@
         }, 5000);
       }
     });
+
+    function getDefaultHost() {
+      //If you want to force a host, toggle the following boolean:
+      var override = false;
+
+      if (override) {
+        var overrideHost = 'latest.voyent.cloud';
+        voyent.$.setSessionStorageItem(btoa("voyentHost"), btoa(overrideHost));
+        return overrideHost;
+      }
+
+      if (voyent.io.auth.getLastKnownHost()) {
+        return voyent.io.auth.getLastKnownHost();
+      }
+      else {
+        return window.location.hostname;
+      }
+    }
 
     // Startup the Notification Push Listener after login
     window.addEventListener('onAfterLogin', function(){
